@@ -2,6 +2,7 @@
 
 -   Buka Command Prompt dan arahkan ke Folder dimana project akan disimpan.
 -   Ketik `git clone https://github.com/grantgabriel/E-Commerce-Dayamega.git` dan tunggu laravel siap di install.
+-   Ketik `git checkout <nama_branch>` untuk pindah ke branch masing-masing. Misal kamu pelangi maka ketik `git checkout pelangi`.
 -   Copy file `.env.example` menjadi file `.env`.
 -   Lakukan command
 
