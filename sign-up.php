@@ -66,11 +66,11 @@
           </li>
         </ul>
         <li class="nav-item d-flex align-items-center">
-          <a class="btn btn-round btn-sm mb-0 btn-outline-white me-2" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-soft-ui-dashboard">Sign - In</a>
+          <a class="btn btn-round btn-sm mb-0 btn-outline-white me-2"  href="index.php">Sign - In</a>
         </li>
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item">
-            <a href="https://www.creative-tim.com/product/soft-ui-dashboard" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-light">Terms & Condition</a>
+            <a href="#" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-light">Terms & Condition</a>
           </li>
         </ul>
       </div>

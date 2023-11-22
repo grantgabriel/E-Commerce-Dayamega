@@ -1,3 +1,51 @@
+<?php
+  require "includes/db_connect.php";
+
+  if (isset($_POST['login-button'])) {
+    $user_login = $_POST['username'];
+    $pass_login = md5($_POST['password']);  
+    $sql = "SELECT * FROM account WHERE username = '$user_login' and password = '$pass_login'";
+    $query = mysqli_query($koneksi, $sql);
+    
+    if (!$query) {
+      die("Query gagal".mysqli_error($koneksi));
+    }
+
+    while ($row = mysqli_fetch_array($query)) {
+      $user = $row['username'];
+      $pass = $row['password'];
+      $level = $row['level'];
+      $email = $row['email'];
+      $status = $row['status'];
+    }
+
+    if ($user_login == $user && $level == 3 && $pass_login == $pass && $status == '') {
+      header("Location:admin/index.php");
+      $_SESSION['username'] = $user;
+      $_SESSION['level'] = $level;
+      $_SESSION['email'] = $email;
+      $_SESSION['password'] = $pass;
+      
+    } elseif($user_login == $user && $level == 2 && $pass_login == $pass && $status == '') {
+      header("Location:cleaner/index.php");
+      $_SESSION['username'] = $user;
+      $_SESSION['level'] = $level;
+      $_SESSION['email'] = $email;
+      $_SESSION['password'] = $pass;
+    
+    } elseif($user_login == $user && $level == 1 && $pass_login == $pass && $status == '') {
+      header("Location:user/index.php");
+      $_SESSION['username'] = $user;
+      $_SESSION['level'] = $level;
+      $_SESSION['email'] = $email;
+      $_SESSION['password'] = $pass;
+    
+    } else {
+      header("Location:index.php");
+    }
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -69,7 +117,7 @@
                 </li>
               </ul>
               <li class="nav-item d-flex align-items-center">
-                <a class="btn btn-round btn-sm mb-0 btn-outline-primary me-2" target="_blank" href="#">Sign In</a>
+                <a class="btn btn-round btn-sm mb-0 btn-outline-primary me-2" href="sign-up.php">Sign Up</a>
               </li>
             </div>
           </div>
@@ -90,7 +138,7 @@
                   <p class="mb-0">Enter your email and password to sign in</p>
                 </div>
                 <div class="card-body">
-                  <form role="form">
+                  <form role="form" method="POST">
                     <label>Email</label>
                     <div class="mb-3">
                       <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
@@ -104,7 +152,7 @@
                       <label class="form-check-label" for="rememberMe">Remember me</label>
                     </div>
                     <div class="text-center">
-                      <button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0">Sign in</button>
+                      <button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0" name="login-button">Sign in</button>
                     </div>
                   </form>
                 </div>
