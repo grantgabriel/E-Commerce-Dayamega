@@ -1,3 +1,46 @@
+<?php
+
+    require 'includes/db_connect.php';
+    
+
+    if(isset($_POST['send']))
+    {
+      if($_POST['username'] != '')
+      {
+        if($_POST['password'] != '')
+        {
+          if($_POST['password'] === $_POST['passwordcf'])
+          {
+            $username = $_POST['username'];
+            $email = $_POST['email'];
+            $pass = md5($_POST['password']);
+            $level = 1;
+
+            $sql = "INSERT INTO account (username, email, password, level) VALUES ('$username', '$email', '$pass', $level)";
+            $query = mysqli_query($koneksi, $sql);
+            echo "<p class='alert alert-info text-center'><b>Acccount Registered Successully!</b></p>";
+          }
+          else
+          {
+            echo "<p class='alert alert-danger text-center'><b>Password and Confirm Password are'nt correct!</b></p>";
+          }
+        }
+        else
+        {
+          "<p class='alert alert-danger text-center'><b>Please fill in the password form!</b></p>";
+        }
+      }
+      else
+      {
+        echo "<p class='alert alert-danger text-center'><b>Please fill in the username form!</b></p>";
+      }
+    }
+
+
+    $connect->close();
+
+?>  
+
 <!DOCTYPE html>
 <html lang="en">
 

@@ -2,44 +2,55 @@
   require "includes/db_connect.php";
 
   if (isset($_POST['login-button'])) {
-    $user_login = $_POST['username'];
+    $email_login = $_POST['email'];
     $pass_login = md5($_POST['password']);  
-    $sql = "SELECT * FROM account WHERE username = '$user_login' and password = '$pass_login'";
-    $query = mysqli_query($koneksi, $sql);
+    $sql = "SELECT user_id, name, level_user, email, phone_number, password FROM users WHERE email = '$email_login' and password = '$pass_login'";
+    $query = mysqli_query($connect, $sql);
     
     if (!$query) {
-      die("Query gagal".mysqli_error($koneksi));
+      die("Query gagal".mysqli_error($connect));
     }
 
     while ($row = mysqli_fetch_array($query)) {
-      $user = $row['username'];
-      $pass = $row['password'];
-      $level = $row['level'];
+      $id = $row['user_id'];
       $email = $row['email'];
-      $status = $row['status'];
+      $pass = $row['password'];
+      $level = $row['level_user'];
+      $phone_number = $row['phone_number'];
     }
 
-    if ($user_login == $user && $level == 3 && $pass_login == $pass && $status == '') {
-      header("Location:admin/index.php");
-      $_SESSION['username'] = $user;
-      $_SESSION['level'] = $level;
-      $_SESSION['email'] = $email;
-      $_SESSION['password'] = $pass;
+    if ($email_login == $email && $level == 'Users' && $pass_login == $pass) {
+      // $_SESSION['email'] = $email;
+      // $_SESSION['level'] = $level;
+      // $_SESSION['phone_number'] = $phone_number;
+      $_SESSION['id'] = $id;
+
+      header("Location:users/index.php");
       
-    } elseif($user_login == $user && $level == 2 && $pass_login == $pass && $status == '') {
-      header("Location:cleaner/index.php");
-      $_SESSION['username'] = $user;
-      $_SESSION['level'] = $level;
-      $_SESSION['email'] = $email;
-      $_SESSION['password'] = $pass;
+    } elseif($email_login == $email && $level == 'Admin' && $pass_login == $pass) {
+      // $_SESSION['email'] = $email;
+      // $_SESSION['level'] = $level;
+      // $_SESSION['phone_number'] = $phone_number;
+      $_SESSION['id'] = $id;
+
+      header("Location:admin/index.php");
+
+    } elseif($email_login == $email && $level == 'Sales' && $pass_login == $pass) {
+      // $_SESSION['email'] = $email;
+      // $_SESSION['level'] = $level;
+      // $_SESSION['phone_number'] = $phone_number;
+      $_SESSION['id'] = $id;
+
+      header("Location:sales/index.php");
     
-    } elseif($user_login == $user && $level == 1 && $pass_login == $pass && $status == '') {
-      header("Location:user/index.php");
-      $_SESSION['username'] = $user;
-      $_SESSION['level'] = $level;
-      $_SESSION['email'] = $email;
-      $_SESSION['password'] = $pass;
-    
+    } elseif($email_login == $email && $level == 'Courier' && $pass_login == $pass) {
+      // $_SESSION['email'] = $email;
+      // $_SESSION['level'] = $level;
+      // $_SESSION['phone_number'] = $phone_number;
+      $_SESSION['id'] = $id;
+      
+      header("Location:courier/index.php");
+
     } else {
       header("Location:index.php");
     }
@@ -141,18 +152,18 @@
                   <form role="form" method="POST">
                     <label>Email</label>
                     <div class="mb-3">
-                      <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
+                      <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="email" id="name">
                     </div>
                     <label>Password</label>
                     <div class="mb-3">
-                      <input type="email" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                      <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" name="password" id="password">
                     </div>
                     <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="rememberMe" checked="">
                       <label class="form-check-label" for="rememberMe">Remember me</label>
                     </div>
                     <div class="text-center">
-                      <button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0" name="login-button">Sign in</button>
+                      <button type="submit" class="btn bg-gradient-info w-100 mt-4 mb-0" name="login-button">Sign in</button>
                     </div>
                   </form>
                 </div>
