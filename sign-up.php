@@ -1,3 +1,42 @@
+<?php
+  require "includes/db_connect.php";
+
+  function generateUniqueID($idLength) {
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $uniqueID = '';
+
+    for ($i = 0; $i < $idLength; $i++) {
+      $uniqueID .= $characters[rand(0, strlen($characters) - 1)];
+    }
+
+    return $uniqueID;
+  }
+
+  if(isset($_POST['sign-up-button'])) {
+    $user_id = generateUniqueID(9);
+    $name = $_POST['name'];
+    $level = 'Users';
+    $created_at = date("Y-m-d H:i:s");
+    $email = $_POST['email'];
+    $phone_number = $_POST['phone_number'];
+    $password = md5($_POST['password']);
+    
+    $address = $_POST['address'];
+
+
+    $users_sql = "INSERT INTO users (user_id, name, level_user, created_at, email, phone_number, password) VALUES ('$user_id', '$name', '$level', '$created_at', '$email', '$phone_number', '$password')";
+    $query = mysqli_query($connect, $users_sql);
+
+    $customers_sql = "INSERT INTO customers (user_id, address) VALUES ('$user_id', '$address')";
+    $query = mysqli_query($connect, $customers_sql);
+
+    header("Location:index.php");
+  } 
+
+
+  $connect->close();
+?>  
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -66,11 +105,11 @@
           </li>
         </ul>
         <li class="nav-item d-flex align-items-center">
-          <a class="btn btn-round btn-sm mb-0 btn-outline-white me-2" target="_blank" href="https://www.creative-tim.com/builder?ref=navbar-soft-ui-dashboard">Sign - In</a>
+          <a class="btn btn-round btn-sm mb-0 btn-outline-white me-2"  href="index.php">Sign - In</a>
         </li>
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item">
-            <a href="https://www.creative-tim.com/product/soft-ui-dashboard" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-light">Terms & Condition</a>
+            <a href="#" class="btn btn-sm btn-round mb-0 me-1 bg-gradient-light">Terms & Condition</a>
           </li>
         </ul>
       </div>
@@ -142,21 +181,21 @@
                 </div>
               </div>
               <div class="card-body">
-                <form role="form text-left">
+                <form role="form text-left" method="POST" name="sign-up-form" action="#">
                   <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="email-addon">
+                    <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="email-addon" name="name" id="name">
                   </div>
                   <div class="mb-3">
-                    <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
+                    <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="email" id="email">
                   </div>
                   <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Phone-Number" aria-label="Phone-Number" aria-describedby="email-addon">
+                    <input type="text" class="form-control" placeholder="Phone-Number" aria-label="Phone-Number" aria-describedby="email-addon" name="phone_number" id="phone_number">
                   </div>
                   <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Address" aria-label="Address" aria-describedby="email-addon">
+                    <input type="text" class="form-control" placeholder="Address" aria-label="Address" aria-describedby="email-addon" name="address" id="address">
                   </div>
                   <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                    <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" name="password" id="password">
                   </div>
                   <div class="form-check form-check-info text-left">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
@@ -165,7 +204,7 @@
                     </label>
                   </div>
                   <div class="text-center">
-                    <button type="button" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
+                    <button type="button" class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="sign-up-button" id="submit"><input type="submit" id="submit" name="sign-up-button" value="Sign Up" style="all: unset;"></button>
                   </div>
                   <p class="text-sm mt-3 mb-0">Already have an account? <a href="index.php" class="text-dark font-weight-bolder">Sign in</a></p>
                 </form>

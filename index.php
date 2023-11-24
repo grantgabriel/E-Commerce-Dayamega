@@ -1,3 +1,62 @@
+<?php
+  require "includes/db_connect.php";
+
+  if (isset($_POST['login-button'])) {
+    $email_login = $_POST['email'];
+    $pass_login = md5($_POST['password']);  
+    $sql = "SELECT user_id, name, level_user, email, phone_number, password FROM users WHERE email = '$email_login' and password = '$pass_login'";
+    $query = mysqli_query($connect, $sql);
+    
+    if (!$query) {
+      die("Query gagal".mysqli_error($connect));
+    }
+
+    while ($row = mysqli_fetch_array($query)) {
+      $id = $row['user_id'];
+      $email = $row['email'];
+      $pass = $row['password'];
+      $level = $row['level_user'];
+      $phone_number = $row['phone_number'];
+    }
+
+    if ($email_login == $email && $level == 'Users' && $pass_login == $pass) {
+      // $_SESSION['email'] = $email;
+      // $_SESSION['level'] = $level;
+      // $_SESSION['phone_number'] = $phone_number;
+      $_SESSION['id'] = $id;
+
+      header("Location:users/index.php");
+      
+    } elseif($email_login == $email && $level == 'Admin' && $pass_login == $pass) {
+      // $_SESSION['email'] = $email;
+      // $_SESSION['level'] = $level;
+      // $_SESSION['phone_number'] = $phone_number;
+      $_SESSION['id'] = $id;
+
+      header("Location:admin/index.php");
+
+    } elseif($email_login == $email && $level == 'Sales' && $pass_login == $pass) {
+      // $_SESSION['email'] = $email;
+      // $_SESSION['level'] = $level;
+      // $_SESSION['phone_number'] = $phone_number;
+      $_SESSION['id'] = $id;
+
+      header("Location:sales/index.php");
+    
+    } elseif($email_login == $email && $level == 'Courier' && $pass_login == $pass) {
+      // $_SESSION['email'] = $email;
+      // $_SESSION['level'] = $level;
+      // $_SESSION['phone_number'] = $phone_number;
+      $_SESSION['id'] = $id;
+      
+      header("Location:courier/index.php");
+
+    } else {
+      header("Location:index.php");
+    }
+  }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -69,7 +128,7 @@
                 </li>
               </ul>
               <li class="nav-item d-flex align-items-center">
-                <a class="btn btn-round btn-sm mb-0 btn-outline-primary me-2" target="_blank" href="#">Sign In</a>
+                <a class="btn btn-round btn-sm mb-0 btn-outline-primary me-2" href="sign-up.php">Sign Up</a>
               </li>
             </div>
           </div>
@@ -90,21 +149,21 @@
                   <p class="mb-0">Enter your email and password to sign in</p>
                 </div>
                 <div class="card-body">
-                  <form role="form">
+                  <form role="form" method="POST">
                     <label>Email</label>
                     <div class="mb-3">
-                      <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
+                      <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="email" id="name">
                     </div>
                     <label>Password</label>
                     <div class="mb-3">
-                      <input type="email" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                      <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" name="password" id="password">
                     </div>
                     <div class="form-check form-switch">
                       <input class="form-check-input" type="checkbox" id="rememberMe" checked="">
                       <label class="form-check-label" for="rememberMe">Remember me</label>
                     </div>
                     <div class="text-center">
-                      <button type="button" class="btn bg-gradient-info w-100 mt-4 mb-0">Sign in</button>
+                      <button type="submit" class="btn bg-gradient-info w-100 mt-4 mb-0" name="login-button">Sign in</button>
                     </div>
                   </form>
                 </div>

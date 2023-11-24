@@ -1,13 +1,31 @@
+<?php
+	require "../includes/db_connect.php";
+	
+	$id = $_SESSION['id'];
+
+	$sql = "SELECT * FROM users WHERE user_id = '$id'";
+	$query = mysqli_query($connect, $sql);
+	
+	if (!$query) {
+		die("Query gagal".mysqli_error($connect));
+	}
+
+	while ($row = mysqli_fetch_array($query)) {
+    	$name = $row['name'];
+    	$email = $row['email'];
+    }
+?>
+
 <!DOCTYPE html>
 <html lang="en">
-
 <head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="../assets/img/dayamega.jpeg">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title>Electro - HTML Ecommerce Template</title>
+	<title>Dayamega's E-Commerce</title>
 
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -44,13 +62,13 @@
 		<div id="top-header">
 			<div class="container">
 				<ul class="header-links pull-left">
-					<li><a href="#"><i class="fa fa-phone"></i> +021-95-51-84</a></li>
-					<li><a href="#"><i class="fa fa-envelope-o"></i> email@email.com</a></li>
-					<li><a href="#"><i class="fa fa-map-marker"></i> 1734 Stonecoal Road</a></li>
+					<li><a href="#"><i class="fa fa-phone"></i>+62 812-1314-1516</a></li>
+					<li><a href="#"><i class="fa fa-envelope-o"></i> dayamegapratama@gmail.com</a></li>
+					<li><a href="#"><i class="fa fa-map-marker"></i> Putri Hijau Road No. 29 </a></li>
 				</ul>
 				<ul class="header-links pull-right">
-					<li><a href="#"><i class="fa fa-dollar"></i> USD</a></li>
-					<li><a href="#"><i class="fa fa-user-o"></i> My Account</a></li>
+					<li><a href="#"><i class="fa fa-dollar"></i> Pricelist </a></li>
+					<li><a href="#"><i class="fa fa-user-o"></i> <?= $name ?> </a></li>
 				</ul>
 			</div>
 		</div>
@@ -66,7 +84,7 @@
 					<div class="col-md-3">
 						<div class="header-logo">
 							<a href="#" class="logo">
-								<img src="./img/logo.png" alt="">
+								<img src="../assets/img/dayamega.jpeg" alt="" height="70" width="70">
 							</a>
 						</div>
 					</div>
@@ -176,8 +194,6 @@
 					<li><a href="#">Hot Deals</a></li>
 					<li><a href="#">Categories</a></li>
 					<li><a href="#">Laptops</a></li>
-					<li><a href="#">Smartphones</a></li>
-					<li><a href="#">Cameras</a></li>
 					<li><a href="#">Accessories</a></li>
 				</ul>
 				<!-- /NAV -->
@@ -229,7 +245,7 @@
 							<img src="./img/shop02.png" alt="">
 						</div>
 						<div class="shop-body">
-							<h3>Cameras<br>Collection</h3>
+							<h3>Others<br>Collection</h3>
 							<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
 						</div>
 					</div>
@@ -256,9 +272,8 @@
 						<div class="section-nav">
 							<ul class="section-tab-nav tab-nav">
 								<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
-								<li><a data-toggle="tab" href="#tab1">Smartphones</a></li>
-								<li><a data-toggle="tab" href="#tab1">Cameras</a></li>
 								<li><a data-toggle="tab" href="#tab1">Accessories</a></li>
+								<li><a data-toggle="tab" href="#tab1">Others</a></li>
 							</ul>
 						</div>
 					</div>
