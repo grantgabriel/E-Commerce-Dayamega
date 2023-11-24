@@ -1,44 +1,40 @@
 <?php
+  require "includes/db_connect.php";
 
-    require 'includes/db_connect.php';
-    
+  function generateUniqueID($idLength) {
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $uniqueID = '';
 
-    if(isset($_POST['send']))
-    {
-      if($_POST['username'] != '')
-      {
-        if($_POST['password'] != '')
-        {
-          if($_POST['password'] === $_POST['passwordcf'])
-          {
-            $username = $_POST['username'];
-            $email = $_POST['email'];
-            $pass = md5($_POST['password']);
-            $level = 1;
-
-            $sql = "INSERT INTO account (username, email, password, level) VALUES ('$username', '$email', '$pass', $level)";
-            $query = mysqli_query($koneksi, $sql);
-            echo "<p class='alert alert-info text-center'><b>Acccount Registered Successully!</b></p>";
-          }
-          else
-          {
-            echo "<p class='alert alert-danger text-center'><b>Password and Confirm Password are'nt correct!</b></p>";
-          }
-        }
-        else
-        {
-          "<p class='alert alert-danger text-center'><b>Please fill in the password form!</b></p>";
-        }
-      }
-      else
-      {
-        echo "<p class='alert alert-danger text-center'><b>Please fill in the username form!</b></p>";
-      }
+    for ($i = 0; $i < $idLength; $i++) {
+      $uniqueID .= $characters[rand(0, strlen($characters) - 1)];
     }
 
+    return $uniqueID;
+  }
 
-    $connect->close();
+  if(isset($_POST['sign-up-button'])) {
+    $user_id = generateUniqueID(9);
+    $name = $_POST['name'];
+    $level = 'Users';
+    $created_at = date("Y-m-d H:i:s");
+    $email = $_POST['email'];
+    $phone_number = $_POST['phone_number'];
+    $password = md5($_POST['password']);
+    
+    $address = $_POST['address'];
 
+
+    $users_sql = "INSERT INTO users (user_id, name, level_user, created_at, email, phone_number, password) VALUES ('$user_id', '$name', '$level', '$created_at', '$email', '$phone_number', '$password')";
+    $query = mysqli_query($connect, $users_sql);
+
+    $customers_sql = "INSERT INTO customers (user_id, address) VALUES ('$user_id', '$address')";
+    $query = mysqli_query($connect, $customers_sql);
+
+    header("Location:index.php");
+  } 
+
+
+  $connect->close();
 ?>  
 
 <!DOCTYPE html>
@@ -185,21 +181,21 @@
                 </div>
               </div>
               <div class="card-body">
-                <form role="form text-left">
+                <form role="form text-left" method="POST" name="sign-up-form" action="#">
                   <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="email-addon">
+                    <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="email-addon" name="name" id="name">
                   </div>
                   <div class="mb-3">
-                    <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon">
+                    <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="email" id="email">
                   </div>
                   <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Phone-Number" aria-label="Phone-Number" aria-describedby="email-addon">
+                    <input type="text" class="form-control" placeholder="Phone-Number" aria-label="Phone-Number" aria-describedby="email-addon" name="phone_number" id="phone_number">
                   </div>
                   <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Address" aria-label="Address" aria-describedby="email-addon">
+                    <input type="text" class="form-control" placeholder="Address" aria-label="Address" aria-describedby="email-addon" name="address" id="address">
                   </div>
                   <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon">
+                    <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" name="password" id="password">
                   </div>
                   <div class="form-check form-check-info text-left">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
@@ -208,7 +204,7 @@
                     </label>
                   </div>
                   <div class="text-center">
-                    <button type="button" class="btn bg-gradient-dark w-100 my-4 mb-2">Sign up</button>
+                    <button type="button" class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="sign-up-button" id="submit"><input type="submit" id="submit" name="sign-up-button" value="Sign Up" style="all: unset;"></button>
                   </div>
                   <p class="text-sm mt-3 mb-0">Already have an account? <a href="index.php" class="text-dark font-weight-bolder">Sign in</a></p>
                 </form>

@@ -11,6 +11,6 @@
     $connect = mysqli_connect($host, $user, $pass, $database);
 
     if ($connect->connect_error) {
-        die("Koneksi Gagal".$koneksi->connect_error);
+        die("Koneksi Gagal".$connect->connect_error);
     }
 ?>
