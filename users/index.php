@@ -62,7 +62,7 @@
 		<div id="top-header">
 			<div class="container">
 				<ul class="header-links pull-left">
-					<li><a href="#"><i class="fa fa-phone"></i>+62 812-1314-1516</a></li>
+					<li><a href="#"><i class="fa fa-phone"></i> +62 812-1314-1516 </a></li>
 					<li><a href="#"><i class="fa fa-envelope-o"></i> dayamegapratama@gmail.com</a></li>
 					<li><a href="#"><i class="fa fa-map-marker"></i> Putri Hijau Road No. 29 </a></li>
 				</ul>
@@ -1072,12 +1072,11 @@
 					<div class="col-md-3 col-xs-6">
 						<div class="footer">
 							<h3 class="footer-title">About Us</h3>
-							<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor
-								incididunt ut.</p>
+							<p>Dayamega is an IT company specializing in laptops supply chain and spare parts.</p>
 							<ul class="footer-links">
-								<li><a href="#"><i class="fa fa-map-marker"></i>1734 Stonecoal Road</a></li>
-								<li><a href="#"><i class="fa fa-phone"></i>+021-95-51-84</a></li>
-								<li><a href="#"><i class="fa fa-envelope-o"></i>email@email.com</a></li>
+								<li><a href="#"><i class="fa fa-map-marker"></i> Putri Hijau Road No. 29 </a></li>
+								<li><a href="#"><i class="fa fa-phone"></i> +62 812-1314-1516 </a></li>
+								<li><a href="#"><i class="fa fa-envelope-o"></i> dayamegapratama@gmail.com </a></li>
 							</ul>
 						</div>
 					</div>
@@ -1088,9 +1087,8 @@
 							<ul class="footer-links">
 								<li><a href="#">Hot deals</a></li>
 								<li><a href="#">Laptops</a></li>
-								<li><a href="#">Smartphones</a></li>
-								<li><a href="#">Cameras</a></li>
 								<li><a href="#">Accessories</a></li>
+								<li><a href="#">Others</a></li>
 							</ul>
 						</div>
 					</div>
@@ -1148,7 +1146,7 @@
 							Copyright &copy;
 							<script>document.write(new Date().getFullYear());</script> All rights reserved | This
 							template is made with <i class="fa fa-heart-o" aria-hidden="true"></i> by <a
-								href="https://colorlib.com" target="_blank">Colorlib</a>
+								href="https://github.com/grantgabriel/E-Commerce-Dayamega" target="_blank">Group 5</a>
 							<!-- Link back to Colorlib can't be removed. Template is licensed under CC BY 3.0. -->
 						</span>
 					</div>
