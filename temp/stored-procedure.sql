@@ -222,3 +222,55 @@ BEGIN
 END &&
 DELIMITER ;
 
+-- Stored procedure untuk update harga produk -- 11
+DELIMITER &&
+CREATE PROCEDURE updateItemPrices(
+    IN product_id_param CHAR(9),
+    IN dealer_prices_param DECIMAL(10, 0)
+)
+BEGIN
+    DECLARE converted_product_id CHAR(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+    SET converted_product_id = CONVERT(product_id_param USING utf8mb4);
+    UPDATE products SET dealer_prices = dealer_prices_param WHERE product_id = converted_product_id;
+END; &&
+DELIMITER ;
+
+-- Stored procedure untuk insert data kategori -- 12
+DELIMITER &&
+CREATE PROCEDURE addCategory(
+    IN category_id CHAR(2),
+    IN category VARCHAR(255)
+)
+BEGIN
+    INSERT INTO categories VALUES (category_id, category);
+END; &&
+DELIMITER ;
+
+-- Stored procedure untuk update status pesanan -- 13
+DELIMITER &&
+CREATE PROCEDURE updateOrderStatus(
+    IN order_id_param CHAR(10),
+    IN status_param VARCHAR(255),
+    IN message_param VARCHAR(255)
+)
+BEGIN
+    DECLARE order_id_temp CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+    DECLARE message_temp VARCHAR(255) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+
+    SET order_id_temp = order_id_param;
+    SET message_temp = message_param;
+
+    UPDATE orders SET status = status_param WHERE order_id COLLATE utf8mb4_general_ci = order_id_temp;
+    UPDATE orders SET message = message_param WHERE order_id COLLATE utf8mb4_general_ci = order_id_temp;
+END &&
+DELIMITER ;
+
+
+--TEMPLATE
+DELIMITER &&
+CREATE PROCEDURE 
+BEGIN
+
+END; &&
+DELIMITER ;
+
