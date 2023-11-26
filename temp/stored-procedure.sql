@@ -34,7 +34,6 @@ BEGIN
 END &&
 DELIMITER ;
 
-
 -- Stored procedure untuk tambah data sales -- 3
 DELIMITER &&
 CREATE PROCEDURE appendSales(
@@ -114,20 +113,19 @@ END &&
 DELIMITER ;
 
 -- Untuk menyimpan data saat terjadi purchase -- 7
+-- NOTE : INI GAGAL MULU NGENTOT JADI GAK BAKAL DIPAKE, TP TTP AJA CATAT KE LAPORAN YA KMMAC.
+--        ERROR TERUS INI PROCEDURE KENTOT EMANG PALING PAS PAKE DOCKER
 DELIMITER &&
 CREATE PROCEDURE addPurchase(
     IN order_id CHAR(10),
     IN product_id_param CHAR(9),
     IN user_id CHAR(9),
     IN delivery_address TEXT,
-    IN contact CHAR(13),
-    IN courier_id CHAR(9),
-    IN status VARCHAR(255),
-    IN message VARCHAR(255),
+    IN contact CHAR(13)
 )
 BEGIN
     DECLARE purchase_total DECIMAL(10, 0);
-    SELECT dealer_prices INTO purchase_total WHERE product_id = product_id_param;
+    SELECT dealer_prices INTO purchase_total FROM products WHERE product_id = CONVERT(product_id_param USING utf8mb4_general_ci);
 
     INSERT INTO orders VALUES(
         order_id,
@@ -136,11 +134,23 @@ BEGIN
         purchase_total,
         delivery_address,
         contact,
-        order_date,
-        courier_id,
-        status,
-        message,
-    )
+        NOW(),
+        getRandomCourierUserId(),
+        'Unconfirmed',
+        NULL
+    );
+END; &&
+DELIMITER ;
+
+-- Stored procedure untuk menghapus data pesanan -- 8
+DELIMITER &&
+CREATE PROCEDURE deletePurchase(
+    IN order_id_param CHAR(10)
+)
+BEGIN
+    DECLARE converted_order_id CHAR(10) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+    SET converted_order_id = CONVERT(order_id_param USING utf8mb4);
+    DELETE FROM orders WHERE order_id = converted_order_id;
 END; &&
 DELIMITER ;
 
@@ -211,3 +221,4 @@ BEGIN
     DELETE FROM products WHERE product_id = converted_id;
 END &&
 DELIMITER ;
+
