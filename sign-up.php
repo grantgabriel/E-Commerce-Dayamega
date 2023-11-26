@@ -25,17 +25,10 @@
     $address = $_POST['address'];
 
 
-    $users_sql = "INSERT INTO users(user_id, name, level_user, created_at, email, phone_number, password) VALUES ('$user_id', '$name', '$level', '$created_at', '$email', '$phone_number', '$password')";
+    $users_sql = "CALL appendCustomers('$user_id', '$name', '$email', '$phone_number', '$password', '$address')";
     $users_query = mysqli_query($connect, $users_sql);
     
     if (!$users_query) {
-      die("Query gagal".mysqli_error($connect));
-    }
-
-    $customers_sql = "INSERT INTO customers(user_id, address) VALUES ('$user_id', '$address')";
-    $customers_query = mysqli_query($connect, $customers_sql);
-
-    if (!$customers_query) {
       die("Query gagal".mysqli_error($connect));
     }
 
