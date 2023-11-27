@@ -42,13 +42,30 @@ BEGIN
 END; &&
 DELIMITER ;
 
-
-
-
-
 !-- PENTING : Ini Belum ada di Laporan! 
 
 -- Stored function untuk menghitung banyak laporan yang belum terselesaikan
+DELIMITER &&
+CREATE FUNCTION countUnresolvedReports() RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fUnresolvedReports INT;
+    SELECT COUNT(*) INTO fUnresolvedReports FROM reports WHERE status = 'Unresolved';
+    RETURN fUnresolvedReports;
+END; &&
+DELIMITER ;
+
+-- Stored function untuk menghitung banyak laporan yang sudah terselesaikan
+DELIMITER &&
+CREATE FUNCTION countResolvedReports() RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fResolvedReports INT;
+    SELECT COUNT(*) INTO fResolvedReports FROM reports WHERE status = 'Resolved';
+    RETURN fResolvedReports;
+END; &&
+DELIMITER ;
+
 
 -- Stored function untuk mengambil userid dari kurir secara acak.
 DELIMITER &&
@@ -65,6 +82,29 @@ BEGIN
     LIMIT 1;
 
     RETURN courierId;
+END &&
+DELIMITER ;
+
+-- Stored function untuk generate random ID
+DELIMITER &&
+CREATE FUNCTION generateUniqueID(limitLength INT)
+RETURNS VARCHAR(255)
+DETERMINISTIC
+BEGIN
+    DECLARE characters VARCHAR(36);
+    DECLARE uniqueID VARCHAR(255);
+    DECLARE i INT;
+
+    SET characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    SET uniqueID = '';
+    SET i = 0;
+
+    WHILE i < limitLength DO
+        SET uniqueID = CONCAT(uniqueID, SUBSTRING(characters, FLOOR(1 + RAND() * 36), 1));
+        SET i = i + 1;
+    END WHILE;
+
+    RETURN uniqueID;
 END &&
 DELIMITER ;
 

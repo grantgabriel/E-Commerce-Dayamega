@@ -25,7 +25,7 @@
     $address = $_POST['address'];
 
 
-    $users_sql = "CALL appendCustomers('$user_id', '$name', '$email', '$phone_number', '$password', '$address')";
+    $users_sql = "CALL appendCustomers('generateUniqueID()', '$name', '$email', '$phone_number', '$password', '$address')";
     $users_query = mysqli_query($connect, $users_sql);
     
     if (!$users_query) {

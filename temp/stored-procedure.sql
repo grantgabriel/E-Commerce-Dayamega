@@ -265,6 +265,21 @@ BEGIN
 END &&
 DELIMITER ;
 
+-- Stored procedure untuk mengisi laporan -- 14
+DELIMITER &&
+CREATE PROCEDURE reportsIssue(
+    IN user_id CHAR(9),
+    IN description TEXT
+) 
+BEGIN
+    INSERT INTO reports VALUES (
+        user_id, 
+        description,
+        'Unresolved',
+        NOW()
+    );
+END; &&
+DELIMITER ;
 
 --TEMPLATE
 DELIMITER &&
