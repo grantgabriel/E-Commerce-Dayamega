@@ -125,4 +125,47 @@ BEGIN
 END &&
 DELIMITER ;
 
+-- Stored function untuk menghitung total paket yang belum dikirim kurir tertentu -- 12
+DELIMITER &&
+CREATE FUNCTION countUndeliveredPackages(courier_id_param CHAR(9)) RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fUndeliveredPackages INT;
+    
+    SELECT COUNT(*) INTO fUndeliveredPackages FROM orders 
+    WHERE courier_id COLLATE utf8mb4_general_ci = courier_id_param COLLATE utf8mb4_general_ci 
+    AND status = 'Confirmed';
 
+    RETURN fUndeliveredPackages;
+END; &&
+DELIMITER ;
+
+-- Stored function untuk menghitung total paket yang telah dikirim kurir tertentu -- 13
+DELIMITER &&
+CREATE FUNCTION countDeliveredPackages(courier_id_param CHAR(9)) RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fDeliveredPackages INT;
+    
+    SELECT COUNT(*) INTO fDeliveredPackages FROM orders 
+    WHERE courier_id COLLATE utf8mb4_general_ci = courier_id_param COLLATE utf8mb4_general_ci 
+    AND status = 'Received';
+
+    RETURN fDeliveredPackages;
+END; &&
+DELIMITER ;
+
+-- Stored function untuk menghitung total paket yang telah diantar oleh semua kurir dalam bulan tertentu -- 14
+DELIMITER &&
+CREATE FUNCTION countMonthlyDeliveredPackages(month INT) RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fDeliveredPackages INT;
+    
+    SELECT COUNT(*) INTO fDeliveredPackages FROM orders 
+    WHERE status = 'Received' AND 
+    MONTH(order_date) = month;
+
+    RETURN fDeliveredPackages;
+END; &&
+DELIMITER ;
