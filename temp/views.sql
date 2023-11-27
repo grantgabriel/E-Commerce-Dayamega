@@ -31,9 +31,9 @@ CREATE VIEW confirmed_order_delivery AS
     SELECT
         order_id,
         u.name,
+        u.email,
         p.product_name,
         delivery_address,
-        total,
         order_date
     FROM
         orders o
@@ -96,3 +96,6 @@ CREATE VIEW unconfirmed_order_delivery AS
             JOIN users u ON o.user_id = u.user_id
     WHERE
         status IN ('Unconfirmed');
+
+-- View untuk menampilkan semua data undelivered pada kurir tertentu --> 8
+CREATE VIEW 
