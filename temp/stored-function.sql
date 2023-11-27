@@ -124,3 +124,26 @@ BEGIN
     RETURN COALESCE(profit, 0.00);
 END &&
 DELIMITER ;
+
+-- Function untuk mendapatkan tanggal awal bulan lalu
+DELIMITER $$
+CREATE FUNCTION getLastMonthFirst() RETURNS VARCHAR(255)
+DETERMINISTIC
+    BEGIN
+        DECLARE last_month VARCHAR(10);
+        SET last_month = CONCAT(YEAR(NOW()) , '-' , MONTH(NOW() - INTERVAL 1 MONTH) , '-01');
+        RETURN last_month;
+    END $$
+DELIMITER ;
+
+-- Function untuk mendapatkan tanggal akhir bulan lalu
+DELIMITER $$
+CREATE FUNCTION getLastMonthLast() RETURNS VARCHAR(255)
+DETERMINISTIC
+    BEGIN
+        DECLARE last_month VARCHAR(10);
+        SET last_month = CONCAT(YEAR(NOW()) , '-' , MONTH(NOW() - INTERVAL 1 MONTH) , '-31');
+        RETURN last_month;
+    END $$
+DELIMITER ;
+
