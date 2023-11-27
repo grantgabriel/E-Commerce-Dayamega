@@ -281,6 +281,33 @@ BEGIN
 END; &&
 DELIMITER ;
 
+-- Procedure untuk mendapatkan laporan penjualan produk pada bulan tertentu -- 15
+DELIMITER &&
+CREATE PROCEDURE getSalesReport(month INT)
+BEGIN
+    DECLARE startDate DATETIME;
+    DECLARE endDate DATETIME;
+
+    SET startDate = CONCAT(YEAR(CURDATE()), '-', LPAD(month, 2, '0'), '-01 00:00:00');
+    SET endDate = LAST_DAY(startDate) + INTERVAL 1 DAY - INTERVAL 1 SECOND;
+
+    SELECT
+        order_id,
+        u.name AS user_name,
+        p.product_name,
+        total,
+        order_date
+    FROM
+        orders o
+        JOIN products p ON p.product_id = o.product_id
+        JOIN users u ON u.user_id = o.user_id
+    WHERE
+        order_date >= startDate AND order_date <= endDate
+    ORDER BY
+        order_date DESC;
+END &&
+DELIMITER ;
+
 --TEMPLATE
 DELIMITER &&
 CREATE PROCEDURE 
