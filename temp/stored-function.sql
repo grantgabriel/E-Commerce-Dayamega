@@ -169,3 +169,36 @@ BEGIN
     RETURN fDeliveredPackages;
 END; &&
 DELIMITER ;
+
+-- Stored function untuk menghitung total report yang belum diselesaikan pada bulan tertentu -- 15
+DELIMITER &&
+CREATE FUNCTION countMonthlyUnresolvedReports(input_month INT) RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fUnresolvedReports INT;
+
+    SELECT COUNT(*) INTO fUnresolvedReports 
+    FROM reports 
+    WHERE status = 'Unresolved' 
+    AND MONTH(time) = input_month;
+
+    RETURN fUnresolvedReports;
+END &&
+DELIMITER ;
+
+-- Stored function untuk menghitung total report yang sudah diselesaikan pada bulan tertentu -- 16
+DELIMITER &&
+CREATE FUNCTION countMonthlyResolvedReports(input_month INT) RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fResolvedReports INT;
+
+    SELECT COUNT(*) INTO fResolvedReports 
+    FROM reports 
+    WHERE status = 'Resolved' 
+    AND MONTH(time) = input_month;
+
+    RETURN fResolvedReports;
+END &&
+DELIMITER ;
+

@@ -273,6 +273,7 @@ CREATE PROCEDURE reportsIssue(
 ) 
 BEGIN
     INSERT INTO reports VALUES (
+        generateUniqueID(5),
         user_id, 
         description,
         'Unresolved',
@@ -307,6 +308,17 @@ BEGIN
         order_date DESC;
 END &&
 DELIMITER ;
+
+-- Stored procedure untuk mengupdate status reports
+DELIMITER &&
+CREATE PROCEDURE updateReport(report_id_param CHAR(5))
+BEGIN
+    DECLARE report_id_cv CHAR(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+    SET report_id_cv = CONVERT(report_id_param USING utf8mb4);
+    UPDATE reports SET status = 'Resolved' WHERE report_id = report_id_cv;
+END; &&
+DELIMITER ;
+
 
 --TEMPLATE
 DELIMITER &&

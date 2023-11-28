@@ -18,11 +18,14 @@ CREATE VIEW stock_report AS
 -- View untuk laporan bug yang belum terselesaikan--> 2
 CREATE VIEW unresolved_bug_report AS
     SELECT
-        user_id,
+        report_id,
+        u.name,
+        u.email,
         description,
         time
     FROM
-        reports
+        reports r
+        JOIN users u ON r.user_id = u.user_id 
     WHERE
         status = 'Unresolved';
 
