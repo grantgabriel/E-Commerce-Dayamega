@@ -309,7 +309,7 @@ BEGIN
 END &&
 DELIMITER ;
 
--- Stored procedure untuk mengupdate status reports
+-- Stored procedure untuk mengupdate status reports -- 16
 DELIMITER &&
 CREATE PROCEDURE updateReport(report_id_param CHAR(5))
 BEGIN

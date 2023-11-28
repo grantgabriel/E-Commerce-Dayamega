@@ -1,4 +1,4 @@
--- Menghitung hourly fee kurir -- 2
+-- Menghitung hourly fee kurir -- 1
 DELIMITER &&
 CREATE FUNCTION courierSalary(courier_id CHAR(9)) RETURNS DECIMAL(10, 2)
 DETERMINISTIC
@@ -9,7 +9,7 @@ BEGIN
 END; &&
 DELIMITER ;
 
--- Menghitung banyak jumlah akun pembeli -- 3
+-- Menghitung banyak jumlah akun pembeli -- 2
 DELIMITER &&
 CREATE FUNCTION countCustomer() RETURNS INT
 DETERMINISTIC
@@ -20,7 +20,7 @@ BEGIN
 END; &&
 DELIMITER ;
 
--- Menghitung banyak jumlah akun penjual -- 4
+-- Menghitung banyak jumlah akun penjual -- 3
 DELIMITER &&
 CREATE FUNCTION countSales() RETURNS INT
 DETERMINISTIC
@@ -31,7 +31,7 @@ BEGIN
 END; &&
 DELIMITER ;
 
--- Menghitung banyak jumlah akun kurir -- 5
+-- Menghitung banyak jumlah akun kurir -- 4
 DELIMITER &&
 CREATE FUNCTION countCouriers() RETURNS INT
 DETERMINISTIC
@@ -44,7 +44,7 @@ DELIMITER ;
 
 !-- PENTING : Ini Belum ada di Laporan! 
 
--- Stored function untuk menghitung banyak laporan yang belum terselesaikan -- 7
+-- Stored function untuk menghitung banyak laporan yang belum terselesaikan -- 5
 DELIMITER &&
 CREATE FUNCTION countUnresolvedReports() RETURNS INT
 DETERMINISTIC
@@ -55,7 +55,7 @@ BEGIN
 END; &&
 DELIMITER ;
 
--- Stored function untuk menghitung banyak laporan yang sudah terselesaikan -- 8
+-- Stored function untuk menghitung banyak laporan yang sudah terselesaikan -- 6
 DELIMITER &&
 CREATE FUNCTION countResolvedReports() RETURNS INT
 DETERMINISTIC
@@ -67,7 +67,7 @@ END; &&
 DELIMITER ;
 
 
--- Stored function untuk mengambil userid dari kurir secara acak. -- 9
+-- Stored function untuk mengambil userid dari kurir secara acak. -- 7
 DELIMITER &&
 CREATE FUNCTION getRandomCourierUserId()
 RETURNS CHAR(9)
@@ -85,7 +85,7 @@ BEGIN
 END &&
 DELIMITER ;
 
--- Stored function untuk generate random ID -- 10
+-- Stored function untuk generate random ID -- 8
 DELIMITER &&
 CREATE FUNCTION generateUniqueID(limitLength INT)
 RETURNS VARCHAR(255)
@@ -108,7 +108,7 @@ BEGIN
 END &&
 DELIMITER ;
 
--- Stored function untuk menghitung total laba bulan -- 11 
+-- Stored function untuk menghitung total laba bulan -- 9
 -- JANGAN DISENTUH LAGI KODE INI UDAH BERJALAN YAA ALLAHH
 -- Jangan tanya, biarlah Tuhan dan hanya Tuhan yang paham
 DELIMITER &&
@@ -125,7 +125,7 @@ BEGIN
 END &&
 DELIMITER ;
 
--- Stored function untuk menghitung total paket yang belum dikirim kurir tertentu -- 12
+-- Stored function untuk menghitung total paket yang belum dikirim kurir tertentu -- 10
 DELIMITER &&
 CREATE FUNCTION countUndeliveredPackages(courier_id_param CHAR(9)) RETURNS INT
 DETERMINISTIC
@@ -140,7 +140,7 @@ BEGIN
 END; &&
 DELIMITER ;
 
--- Stored function untuk menghitung total paket yang telah dikirim kurir tertentu -- 13
+-- Stored function untuk menghitung total paket yang telah dikirim kurir tertentu -- 11
 DELIMITER &&
 CREATE FUNCTION countDeliveredPackages(courier_id_param CHAR(9)) RETURNS INT
 DETERMINISTIC
@@ -155,7 +155,7 @@ BEGIN
 END; &&
 DELIMITER ;
 
--- Stored function untuk menghitung total paket yang telah diantar oleh semua kurir dalam bulan tertentu -- 14
+-- Stored function untuk menghitung total paket yang telah diantar oleh semua kurir dalam bulan tertentu -- 12
 DELIMITER &&
 CREATE FUNCTION countMonthlyDeliveredPackages(month INT) RETURNS INT
 DETERMINISTIC
@@ -170,7 +170,7 @@ BEGIN
 END; &&
 DELIMITER ;
 
--- Stored function untuk menghitung total report yang belum diselesaikan pada bulan tertentu -- 15
+-- Stored function untuk menghitung total report yang belum diselesaikan pada bulan tertentu -- 13
 DELIMITER &&
 CREATE FUNCTION countMonthlyUnresolvedReports(input_month INT) RETURNS INT
 DETERMINISTIC
@@ -186,7 +186,7 @@ BEGIN
 END &&
 DELIMITER ;
 
--- Stored function untuk menghitung total report yang sudah diselesaikan pada bulan tertentu -- 16
+-- Stored function untuk menghitung total report yang sudah diselesaikan pada bulan tertentu -- 14
 DELIMITER &&
 CREATE FUNCTION countMonthlyResolvedReports(input_month INT) RETURNS INT
 DETERMINISTIC
