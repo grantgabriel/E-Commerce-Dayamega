@@ -3,8 +3,8 @@ require "../includes/db_connect.php";
 
 $id = $_SESSION['id'];
 
-$profile_sql = "SELECT * FROM users WHERE user_id = '$id'";
-$query = mysqli_query($connect, $profile_sql);
+$sql = "SELECT * FROM users WHERE user_id = '$id'";
+$query = mysqli_query($connect, $sql);
 
 if (!$query) {
     die("Query gagal" . mysqli_error($connect));
@@ -12,8 +12,8 @@ if (!$query) {
 
 while ($row = mysqli_fetch_array($query)) {
     $name = $row['name'];
+    $email = $row['email'];
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +24,7 @@ while ($row = mysqli_fetch_array($query)) {
     <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="./assets/img/logo.png">
     <title>
-        Courier's Dashboard
+        Admin's Dashboard
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -47,14 +47,14 @@ while ($row = mysqli_fetch_array($query)) {
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0" href="#" target="_blank">
                 <img src="./assets/img/logo.png" class="navbar-brand-img h-100" alt="main_logo">
-                <span class="ms-1 font-weight-bold">Courier's Dashboard</span>
+                <span class="ms-1 font-weight-bold">Admin's Dashboard</span>
             </a>
         </div>
         <hr class="horizontal dark mt-0">
         <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
             <ul class="navbar-nav">
                 <li class="nav-item">
-                    <a class="nav-link  active" href="#">
+                    <a class="nav-link  active" href="./pages/dashboard.html">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>shop </title>
@@ -70,15 +70,15 @@ while ($row = mysqli_fetch_array($query)) {
                                 </g>
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Report</span>
+                        <span class="nav-link-text ms-1">Dashboard</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  " href="unresolved.php">
+                    <a class="nav-link  " href="./pages/tables.html">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>office</title>
-                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd" href="">
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                                     <g transform="translate(-1869.000000, -293.000000)" fill="#FFFFFF" fill-rule="nonzero">
                                         <g transform="translate(1716.000000, 291.000000)">
                                             <g id="office" transform="translate(153.000000, 2.000000)">
@@ -90,11 +90,11 @@ while ($row = mysqli_fetch_array($query)) {
                                 </g>
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Unresolved</span>
+                        <span class="nav-link-text ms-1">Tables</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  " href="index.php">
+                    <a class="nav-link  " href="./pages/billing.html">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>credit-card</title>
@@ -110,14 +110,56 @@ while ($row = mysqli_fetch_array($query)) {
                                 </g>
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Dashboard</span>
+                        <span class="nav-link-text ms-1">Billing</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  " href="./pages/virtual-reality.html">
+                        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <title>box-3d-50</title>
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g transform="translate(-2319.000000, -291.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                                        <g transform="translate(1716.000000, 291.000000)">
+                                            <g transform="translate(603.000000, 0.000000)">
+                                                <path class="color-background" d="M22.7597136,19.3090182 L38.8987031,11.2395234 C39.3926816,10.9925342 39.592906,10.3918611 39.3459167,9.89788265 C39.249157,9.70436312 39.0922432,9.5474453 38.8987261,9.45068056 L20.2741875,0.1378125 L20.2741875,0.1378125 C19.905375,-0.04725 19.469625,-0.04725 19.0995,0.1378125 L3.1011696,8.13815822 C2.60720568,8.38517662 2.40701679,8.98586148 2.6540352,9.4798254 C2.75080129,9.67332903 2.90771305,9.83023153 3.10122239,9.9269862 L21.8652864,19.3090182 C22.1468139,19.4497819 22.4781861,19.4497819 22.7597136,19.3090182 Z"></path>
+                                                <path class="color-background opacity-6" d="M23.625,22.429159 L23.625,39.8805372 C23.625,40.4328219 24.0727153,40.8805372 24.625,40.8805372 C24.7802551,40.8805372 24.9333778,40.8443874 25.0722402,40.7749511 L41.2741875,32.673375 L41.2741875,32.673375 C41.719125,32.4515625 42,31.9974375 42,31.5 L42,14.241659 C42,13.6893742 41.5522847,13.241659 41,13.241659 C40.8447549,13.241659 40.6916418,13.2778041 40.5527864,13.3472318 L24.1777864,21.5347318 C23.8390024,21.7041238 23.625,22.0503869 23.625,22.429159 Z"></path>
+                                                <path class="color-background opacity-6" d="M20.4472136,21.5347318 L1.4472136,12.0347318 C0.953235098,11.7877425 0.352562058,11.9879669 0.105572809,12.4819454 C0.0361450918,12.6208008 6.47121774e-16,12.7739139 0,12.929159 L0,30.1875 L0,30.1875 C0,30.6849375 0.280875,31.1390625 0.7258125,31.3621875 L19.5528096,40.7750766 C20.0467945,41.0220531 20.6474623,40.8218132 20.8944388,40.3278283 C20.963859,40.1889789 21,40.0358742 21,39.8806379 L21,22.429159 C21,22.0503869 20.7859976,21.7041238 20.4472136,21.5347318 Z"></path>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                        <span class="nav-link-text ms-1">Virtual Reality</span>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link  " href="./pages/rtl.html">
+                        <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
+                            <svg width="12px" height="12px" viewBox="0 0 40 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+                                <title>settings</title>
+                                <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+                                    <g transform="translate(-2020.000000, -442.000000)" fill="#FFFFFF" fill-rule="nonzero">
+                                        <g transform="translate(1716.000000, 291.000000)">
+                                            <g transform="translate(304.000000, 151.000000)">
+                                                <polygon class="color-background opacity-6" points="18.0883333 15.7316667 11.1783333 8.82166667 13.3333333 6.66666667 6.66666667 0 0 6.66666667 6.66666667 13.3333333 8.82166667 11.1783333 15.315 17.6716667"></polygon>
+                                                <path class="color-background opacity-6" d="M31.5666667,23.2333333 C31.0516667,23.2933333 30.53,23.3333333 30,23.3333333 C29.4916667,23.3333333 28.9866667,23.3033333 28.48,23.245 L22.4116667,30.7433333 L29.9416667,38.2733333 C32.2433333,40.575 35.9733333,40.575 38.275,38.2733333 L38.275,38.2733333 C40.5766667,35.9716667 40.5766667,32.2416667 38.275,29.94 L31.5666667,23.2333333 Z"></path>
+                                                <path class="color-background" d="M33.785,11.285 L28.715,6.215 L34.0616667,0.868333333 C32.82,0.315 31.4483333,0 30,0 C24.4766667,0 20,4.47666667 20,10 C20,10.99 20.1483333,11.9433333 20.4166667,12.8466667 L2.435,27.3966667 C0.95,28.7083333 0.0633333333,30.595 0.00333333333,32.5733333 C-0.0583333333,34.5533333 0.71,36.4916667 2.11,37.89 C3.47,39.2516667 5.27833333,40 7.20166667,40 C9.26666667,40 11.2366667,39.1133333 12.6033333,37.565 L27.1533333,19.5833333 C28.0566667,19.8516667 29.01,20 30,20 C35.5233333,20 40,15.5233333 40,10 C40,8.55166667 39.685,7.18 39.1316667,5.93666667 L33.785,11.285 Z"></path>
+                                            </g>
+                                        </g>
+                                    </g>
+                                </g>
+                            </svg>
+                        </div>
+                        <span class="nav-link-text ms-1">RTL</span>
                     </a>
                 </li>
                 <li class="nav-item mt-3">
                     <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  " href="profile.php">
+                    <a class="nav-link  " href="./pages/profile.html">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>customer-support</title>
@@ -147,9 +189,9 @@ while ($row = mysqli_fetch_array($query)) {
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Report</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Dashboard</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">Report</h6>
+                    <h6 class="font-weight-bolder mb-0">Dashboard</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -186,52 +228,8 @@ while ($row = mysqli_fetch_array($query)) {
                 </div>
             </div>
         </nav>
-        <section class="min-vh-100 mb-8">
-            <div class="page-header align-items-start min-vh-50 pt-5 pb-11 m-3 border-radius-lg" style="background-image: url('./assets/img/curved-images/curved14.jpg');">
-                <span class="mask bg-gradient-dark opacity-6"></span>
-                <div class="container">
-                    <div class="row justify-content-center">
-                        <div class="col-lg-5 text-center mx-auto">
-                            <h1 class="text-white mb-2 mt-5">Report!</h1>
-                            <p class="text-lead text-white">Report any bug or things in here!</p>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="container">
-                <div class="row mt-lg-n10 mt-md-n11 mt-n10">
-                    <div class="col-xl-7 col-lg-5 col-md-7 mx-auto">
-                        <div class="card z-index-0">
-                            <div class="card-header text-center pt-4">
-                                <h5>Report Form</h5>
-                            </div>
-                            <div class="card-body">
-                                <form role="form text-left" method="POST" name="sign-up-form">
-                                    <div class="mb-3">
-                                        <input type="text" class="form-control" placeholder="Report here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
-                                    </div>
-                                    <div class="text-center">
-                                        <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="report-button" id="submit">Reports!</button>
-                                    </div>
-                                </form>
-
-                                <?php
-                                    require "../includes/db_connect.php";
-
-                                    if(isset($_POST['report-button'])) {
-                                        $report = $_POST['report'];
-                                        $report_query = "CALL reportsIssue('$id', '$report')";
-                                        
-                                        $report_sql = mysqli_query($connect, $report_query);
-                                    }
-                                ?>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </section>
         <!-- End Navbar -->
+
         <footer class="footer pt-3  ">
             <div class="container-fluid">
                 <div class="row align-items-center justify-content-lg-between">
@@ -241,13 +239,13 @@ while ($row = mysqli_fetch_array($query)) {
                                 document.write(new Date().getFullYear())
                             </script>,
                             made with <i class="fa fa-heart"></i> by
-                            <a href="" class="font-weight-bold" target="_blank">Group 5-A</a>
-                            for A grade in MSBD <3. </div>
+                            <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Group 5-A</a>
+                            for an A grade in MSBD.
                         </div>
                     </div>
                 </div>
+            </div>
         </footer>
-        </div>
     </main>
     <div class="fixed-plugin">
         <a class="fixed-plugin-button text-dark position-fixed px-3 py-2">
@@ -311,18 +309,19 @@ while ($row = mysqli_fetch_array($query)) {
     <script src="./assets/js/plugins/chartjs.min.js"></script>
     <script>
         var ctx = document.getElementById("chart-bars").getContext("2d");
+
         new Chart(ctx, {
             type: "bar",
             data: {
                 labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                 datasets: [{
-                    label: "Delivered",
+                    label: "Sales",
                     tension: 0.4,
                     borderWidth: 0,
                     borderRadius: 4,
                     borderSkipped: false,
                     backgroundColor: "#fff",
-                    data: [<?= $apr ?>, <?= $may ?>, <?= $jun ?>, <?= $jul ?>, <?= $aug ?>, <?= $sep ?>, <?= $oct ?>, <?= $nov ?>, <?= $dec ?>],
+                    data: [5, 2, 1, 3, 3, 8, 4, 7, 6],
                     maxBarThickness: 6
                 }, ],
             },
@@ -395,18 +394,31 @@ while ($row = mysqli_fetch_array($query)) {
             data: {
                 labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
                 datasets: [{
-                    label: "Delivered",
-                    tension: 0.4,
-                    borderWidth: 0,
-                    pointRadius: 0,
-                    borderColor: "#cb0c9f",
-                    borderWidth: 3,
-                    backgroundColor: gradientStroke1,
-                    fill: true,
-                    data: [<?= $apr ?>, <?= $may ?>, <?= $jun ?>, <?= $jul ?>, <?= $aug ?>, <?= $sep ?>, <?= $oct ?>, <?= $nov ?>, <?= $dec ?>],
-                    maxBarThickness: 6
+                        label: "Mobile apps",
+                        tension: 0.4,
+                        borderWidth: 0,
+                        pointRadius: 0,
+                        borderColor: "#cb0c9f",
+                        borderWidth: 3,
+                        backgroundColor: gradientStroke1,
+                        fill: true,
+                        data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+                        maxBarThickness: 6
 
-                }, ],
+                    },
+                    {
+                        label: "Websites",
+                        tension: 0.4,
+                        borderWidth: 0,
+                        pointRadius: 0,
+                        borderColor: "#3A416F",
+                        borderWidth: 3,
+                        backgroundColor: gradientStroke2,
+                        fill: true,
+                        data: [30, 90, 40, 140, 290, 290, 340, 230, 400],
+                        maxBarThickness: 6
+                    },
+                ],
             },
             options: {
                 responsive: true,

@@ -186,8 +186,8 @@ BEGIN
 END &&
 DELIMITER ;
 
--- Stored function untuk menghitung total report yang sudah diselesaikan pada bulan tertentu -- 14
-DELIMITER &&
+-- Stored function untuk menghitung total report yang sudah diselesaikan pada bulan tertentu -- 1
+4DELIMITER &&
 CREATE FUNCTION countMonthlyResolvedReports(input_month INT) RETURNS INT
 DETERMINISTIC
 BEGIN
