@@ -101,4 +101,30 @@ CREATE VIEW unconfirmed_order_delivery AS
         status IN ('Unconfirmed');
 
 -- View untuk menampilkan semua data undelivered pada kurir tertentu --> 8
-CREATE VIEW 
+CREATE VIEW log_account AS 
+    SELECT
+        user_id,
+        name,
+        time,
+        action
+    FROM
+
+-- View untuk menggabungkan data log akun untuk admin --> 9
+CREATE VIEW log_account AS
+    SELECT 
+        user_id, name, time, action
+    FROM 
+        log_customers_account
+    UNION ALL
+    SELECT 
+        user_id, name, time, action
+    FROM 
+        log_couriers_account
+    UNION ALL
+    SELECT 
+        user_id, name, time, action
+    FROM 
+        log_sales_account
+    ORDER BY time DESC;
+        
+
