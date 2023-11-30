@@ -45,7 +45,7 @@ while ($row = mysqli_fetch_array($query)) {
     <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-            <a class="navbar-brand m-0" href="#" target="_blank">
+            <a class="navbar-brand m-0" href="index.php">
                 <img src="./assets/img/logo.png" class="navbar-brand-img h-100" alt="main_logo">
                 <span class="ms-1 font-weight-bold">Admin's Log</span>
             </a>
@@ -263,8 +263,8 @@ while ($row = mysqli_fetch_array($query)) {
                                                             <img src="./assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user1">
                                                         </div>
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm"><?= $data['user_id'] ?></h6>
-                                                            <p class="text-xs text-secondary mb-0"><?= $data['name'] ?></p>
+                                                            <h6 class="mb-0 text-sm"><?= $data['name'] ?></h6>
+                                                            <p class="text-xs text-secondary mb-0"><?= $data['user_id'] ?></p>
                                                         </div>
                                                     </div>
                                                 </td>

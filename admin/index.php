@@ -275,7 +275,7 @@
                     <p class="text-sm mb-0 text-capitalize font-weight-bold">Users</p>
                     <h5 class="font-weight-bolder mb-0">
                       <?= $count_customer ?>
-                      <span class="text-success text-sm font-weight-bolder">^</span>
+                      <i class="fa fa-arrow-up text-success"></i>
                     </h5>
                   </div>
                 </div>
@@ -297,7 +297,6 @@
                     <p class="text-sm mb-0 text-capitalize font-weight-bold">Sales</p>
                     <h5 class="font-weight-bolder mb-0">
                       <?= $count_sales ?>
-                      <span class="text-success text-sm font-weight-bolder">^</span>
                     </h5>
                   </div>
                 </div>
@@ -319,7 +318,6 @@
                     <p class="text-sm mb-0 text-capitalize font-weight-bold">Couriers</p>
                     <h5 class="font-weight-bolder mb-0">
                       <?= $count_couriers ?>
-                      <span class="text-success text-sm font-weight-bolder">^</span>
                     </h5>
                   </div>
                 </div>
