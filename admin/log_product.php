@@ -70,11 +70,11 @@ while ($row = mysqli_fetch_array($query)) {
                                 </g>
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Log Purchase</span>
+                        <span class="nav-link-text ms-1">Log Product</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  " href="log_account.php">
+                    <a class="nav-link  " href="log_purchase.php">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>office</title>
@@ -90,11 +90,11 @@ while ($row = mysqli_fetch_array($query)) {
                                 </g>
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Log Account</span>
+                        <span class="nav-link-text ms-1">Log Purchase</span>
                     </a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link  " href="log_product.php">
+                    <a class="nav-link  " href="log_account.php">
                         <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
                             <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                                 <title>credit-card</title>
@@ -110,7 +110,7 @@ while ($row = mysqli_fetch_array($query)) {
                                 </g>
                             </svg>
                         </div>
-                        <span class="nav-link-text ms-1">Log Product</span>
+                        <span class="nav-link-text ms-1">Log Account</span>
                     </a>
                 </li>
                 <li class="nav-item">
@@ -241,11 +241,10 @@ while ($row = mysqli_fetch_array($query)) {
                                 <table class="table align-items-center mb-0">
                                     <thead>
                                         <tr>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center">User ID & Name</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center ">Product</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center ">Total</th>
-                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center ">Date & Timestamp</th>
-                                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Action</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center">Product ID & Name</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center ">Action</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center ">Time</th>
+                                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2 align-middle text-center ">Price</th>
                                             <!-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Action</th> -->
                                         </tr>
                                     </thead>
@@ -253,10 +252,10 @@ while ($row = mysqli_fetch_array($query)) {
                                         <?php
                                         require "../includes/db_connect.php";
 
-                                        $log_purchase_sql = "SELECT * FROM log_purchase_v";
-                                        $log_purchase_query = mysqli_query($connect, $log_purchase_sql);
+                                        $log_product_sql = "SELECT * FROM log_product_v";
+                                        $log_product_query = mysqli_query($connect, $log_product_sql);
 
-                                        while ($data = mysqli_fetch_assoc($log_purchase_query)) {
+                                        while ($data = mysqli_fetch_assoc($log_product_query)) {
                                         ?>
                                             <tr>
                                                 <td>
@@ -265,24 +264,21 @@ while ($row = mysqli_fetch_array($query)) {
                                                             <img src="./assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user1">
                                                         </div>
                                                         <div class="d-flex flex-column justify-content-center">
-                                                            <h6 class="mb-0 text-sm"><?= $data['order_id'] ?></h6>
+                                                            <h6 class="mb-0 text-sm"><?= $data['product_name'] ?></h6>
                                                             <p class="text-xs text-secondary mb-0">
-                                                                <?= $data['name'] ?>
+                                                                <?= $data['product_id'] ?>
                                                             </p>
                                                         </div>
                                                     </div>
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <p class="text-xs text-secondary mb-0"><?= $data['product_name'] ?></p>
-                                                </td>
-                                                <td class="align-middle text-center">
-                                                    <p class="text-xs text-secondary mb-0"><?= $data['total'] ?></p>
+                                                    <p class="text-xs text-secondary mb-0"><?= $data['action'] ?></p>
                                                 </td>
                                                 <td class="align-middle text-center">
                                                     <p class="text-xs text-secondary mb-0"><?= $data['time'] ?></p>
                                                 </td>
                                                 <td class="align-middle text-center">
-                                                    <span class="text-secondary text-xs font-weight-bold"> <?= $data['action'] ?></span>
+                                                    <p class="text-xs text-secondary mb-0"><?= $data['price'] ?></p>
                                                 </td>
                                             </tr>
                                         <?php } ?>

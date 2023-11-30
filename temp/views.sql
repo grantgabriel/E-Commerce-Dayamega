@@ -101,13 +101,6 @@ CREATE VIEW unconfirmed_order_delivery AS
         status IN ('Unconfirmed');
 
 -- View untuk menampilkan semua data undelivered pada kurir tertentu --> 8
-CREATE VIEW log_account AS 
-    SELECT
-        user_id,
-        name,
-        time,
-        action
-    FROM
 
 -- View untuk menggabungkan data log akun untuk admin --> 9
 CREATE VIEW log_account AS
@@ -127,4 +120,32 @@ CREATE VIEW log_account AS
         log_sales_account
     ORDER BY time DESC;
         
+-- View untuk menggabungkan field-field dari log purchase --> 10
+CREATE VIEW log_purchase_v AS
+    SELECT
+        l.order_id,
+        u.name,
+        p.product_name,
+        l.total,
+        l.time,
+        l.action
+    FROM
+        log_purchase l
+            JOIN users u ON u.user_id = l.user_id
+            JOIN products p ON p.product_id = l.product_id
+    ORDER BY time DESC;
+
+-- View untuk menggabungkan field dari log product --> 
+CREATE VIEW log_product_v AS 
+    SELECT
+        l.product_id,
+        p.product_name,
+        l.action,
+        l.time,
+        l.price
+    FROM
+        log_product l 
+            JOIN products p ON p.product_id = l.product_id
+    ORDER BY time DESC;
+
 
