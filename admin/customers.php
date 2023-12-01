@@ -1,21 +1,20 @@
 <?php
-	require "../includes/db_connect.php";
-	
-	$id = $_SESSION['id'];
+require "../includes/db_connect.php";
 
-	$sql = "SELECT * FROM users WHERE user_id = '$id'";
-	$query = mysqli_query($connect, $sql);
-	
-	if (!$query) {
-		die("Query gagal".mysqli_error($connect));
-	}
+$id = $_SESSION['id'];
 
-	while ($row = mysqli_fetch_array($query)) {
-    	$name = $row['name'];
-    	$email = $row['email'];
-  }
+$sql = "SELECT * FROM users WHERE user_id = '$id'";
+$query = mysqli_query($connect, $sql);
+
+if (!$query) {
+  die("Query gagal" . mysqli_error($connect));
+}
+
+while ($row = mysqli_fetch_array($query)) {
+  $name = $row['name'];
+  $email = $row['email'];
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
 
@@ -25,7 +24,7 @@
   <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="./assets/img/logo.png">
   <title>
-    Admin Unresolved Reports
+    Admin's Dashboard
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -46,7 +45,7 @@
   <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
     <div class="sidenav-header">
       <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
-      <a class="navbar-brand m-0" href=" https://demos.creative-tim.com/soft-ui-dashboard/pages/dashboard.html " target="_blank">
+      <a class="navbar-brand m-0" href="index.php">
         <img src="./assets/img/logo.png" class="navbar-brand-img h-100" alt="main_logo">
         <span class="ms-1 font-weight-bold">Admin's Dashboard</span>
       </a>
@@ -55,7 +54,7 @@
     <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
       <ul class="navbar-nav">
         <li class="nav-item">
-          <a class="nav-link  " href="index.php">
+          <a class="nav-link  active" href="#">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 45 40" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>shop </title>
@@ -71,11 +70,11 @@
                 </g>
               </svg>
             </div>
-            <span class="nav-link-text ms-1">Dashboard</span>
+            <span class="nav-link-text ms-1">Customers Data</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link  active" href="#">
+          <a class="nav-link  " href="sales.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>office</title>
@@ -91,11 +90,11 @@
                 </g>
               </svg>
             </div>
-            <span class="nav-link-text ms-1">Unresolved</span>
+            <span class="nav-link-text ms-1">Sales Data</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link  " href="log_account.php">
+          <a class="nav-link  " href="couriers.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>credit-card</title>
@@ -111,13 +110,13 @@
                 </g>
               </svg>
             </div>
-            <span class="nav-link-text ms-1">Log Activity</span>
+            <span class="nav-link-text ms-1">Couriers Data</span>
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link  " href="customers.php">
+          <a class="nav-link  " href="index.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
-              <svg width="12px" height="12px" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+              <svg width="12px" height="12p" viewBox="0 0 42 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>box-3d-50</title>
                 <g stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
                   <g transform="translate(-2319.000000, -291.000000)" fill="#FFFFFF" fill-rule="nonzero">
@@ -132,14 +131,14 @@
                 </g>
               </svg>
             </div>
-            <span class="nav-link-text ms-1">Users Data</span>
+            <span class="nav-link-text ms-1">Dashboard</span>
           </a>
         </li>
         <li class="nav-item mt-3">
           <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Account pages</h6>
         </li>
         <li class="nav-item">
-          <a class="nav-link  " href="report.php">
+          <a class="nav-link  " href="./pages/profile.html">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 46 42" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>customer-support</title>
@@ -189,9 +188,9 @@
         <nav aria-label="breadcrumb">
           <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
             <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Unresolved</li>
+            <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Users</li>
           </ol>
-          <h6 class="font-weight-bolder mb-0">Unresolved</h6>
+          <h6 class="font-weight-bolder mb-0">Users</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
           <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -229,79 +228,48 @@
       </div>
     </nav>
     <!-- End Navbar -->
-    <div class="container-fluid py-4">
-      <div class="row">
-        <div class="col-12">
-          <div class="card mb-4">
-            <div class="card-header pb-0">
-              <h6>Admin Tables</h6>
-            </div>
-            <div class="card-body px-0 pt-0 pb-2">
-              <div class="table-responsive p-0">
-                <table class="table align-items-center mb-0">
-                  <thead>
-                    <tr>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Reporter</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Description</th>
-                      <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">Date</th>
-                      <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Action</th>
-                    </tr>
-                  </thead>
-                  <tbody>
-                    <?php
-	                    require "../includes/db_connect.php";
-                      
-                      $unresolved_report_sql = "SELECT * FROM unresolved_bug_report";
-                      $unresolved_report_query = mysqli_query($connect, $unresolved_report_sql);
-                      
-                      while ($data = mysqli_fetch_assoc($unresolved_report_query)) {
-                    ?>
-                    <tr>
-                      <td>
-                        <div class="d-flex px-2 py-1">
-                          <div>
-                            <img src="./assets/img/team-2.jpg" class="avatar avatar-sm me-3" alt="user1">
-                          </div>
-                          <div class="d-flex flex-column justify-content-center">
-                            <h6 class="mb-0 text-sm"><?= $data['name'] ?></h6>
-                            <p class="text-xs text-secondary mb-0"><?= $data['email'] ?></p>
-                          </div>
-                        </div>
-                      </td>
-                      <td>
-                        <p class="text-xs text-secondary mb-0"><?= $data['description'] ?></p>
-                      </td>
-                      <td class="align-middle text-center">
-                        <span class="text-secondary text-xs font-weight-bold"> <?= $data['time'] ?></span>
-                      </td>
-                      <td class="align-middle">
-                        <form method='POST' action="./unresolved.php">
-                          <input hidden type='text' value="<?= $data['report_id'] ?>" name="report_id">
-                          <button type='submit' name ='update-report-status' style="all: unset;" class="text-secondary font-weight-bold text-xs" data-toggle="tooltip" data-original-title="Edit user">
-                            Resolved
-                          </button>
-                        </form>
+    <div class="card">
+      <div class="card-header pb-0 px-3">
+        <h6 class="mb-0">Users Information</h6>
+      </div>
+      <div class="card-body pt-4 p-3">
+        <ul class="list-group">
+          <?php
+            require "../includes/db_connect.php";
 
-                        <?php
-                          if(isset($_POST['update-report-status'])) {
-                            require "../includes/db_connect.php";
-                            $report_id = $_POST['report_id'];
-            
-                            if($connect) {
-                              $update_report_status_sql = "CALL updateReport('$report_id')";
-                              $update_query = mysqli_query($connect, $update_report_status_sql);
-                            }
-                          }
-                        ?>
-                      </td>
-                    </tr>
-                    <?php } ?>
-                  </tbody>
-                </table>
-              </div>
+            $customers_account_sql = "SELECT * FROM customers_account";
+            $customers_account_query = mysqli_query($connect, $customers_account_sql);
+
+            while ($data = mysqli_fetch_assoc($customers_account_query)) {
+          ?>
+          <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
+            <div class="d-flex flex-column">
+              <h6 class="text-sm"><b><?= $data['name'] ?></b></h6>
+              <h6 class="mb-3 text-xs"><i>Customers</i> - <?= $data['created_at'] ?></h6>
+              <span class="mb-2 text-xs">User ID: <span class="text-dark font-weight-bold ms-sm-2"><?= $data['user_id'] ?></span></span>
+              <span class="mb-2 text-xs">Email Address: <span class="text-dark ms-sm-2 font-weight-bold"><?= $data['email'] ?></span></span>
+              <span class="text-xs">Phone Number: <span class="text-dark ms-sm-2 font-weight-bold"><?= $data['phone_number'] ?></span></span>
             </div>
-          </div>
-        </div>
+            <div class="ms-auto text-end">
+              <form onsubmit="return confirm('Anda Yakin Mau Menghapus Data?');" method='POST'>
+                <input hidden name='user_id' type='text' value="<?= $data['user_id'] ?>">
+                <button type='submit' name='delete-account' style="all: unset;" class='btn btn-link text-danger text-gradient px-3 mb-0'><i class="far fa-trash-alt me-2"></i>Delete</button>
+                <button class="btn btn-link text-dark px-3 mb-0" href="#"><i class="fas fa-pencil-alt text-dark me-2" aria-hidden="true"></i>Edit</button>
+              </form>
+            </div>
+            <?php
+                if(isset($_POST['delete-account'])) {
+                  require "../includes/db_connect.php";
+                  $user_id = $_POST['user_id'];
+
+                  $delete_customer_query = "CALL deleteCustomers('$user_id')";
+                  $delete_customer_sql = mysqli_query($connect, $delete_customer_query);
+                  echo '<meta http-equiv="refresh" content="1">';
+                }
+            ?>
+          </li>
+          <?php } ?>
+        </ul>
       </div>
     </div>
   </main>
@@ -312,7 +280,7 @@
     <div class="card shadow-lg ">
       <div class="card-header pb-0 pt-3 ">
         <div class="float-start">
-          <h5 class="mt-3 mb-0">Soft UI Configurator</h5>
+          <h5 class="mt-3 mb-0">Dashboard Configurator</h5>
           <p>See our dashboard options.</p>
         </div>
         <div class="float-end mt-4">
@@ -356,18 +324,6 @@
           <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)">
         </div>
         <hr class="horizontal dark my-sm-4">
-        <a class="btn bg-gradient-dark w-100" href="https://www.creative-tim.com/product/soft-ui-dashboard">Free Download</a>
-        <a class="btn btn-outline-dark w-100" href="https://www.creative-tim.com/learning-lab/bootstrap/license/soft-ui-dashboard">View documentation</a>
-        <div class="w-100 text-center">
-          <a class="github-button" href="https://github.com/creativetimofficial/soft-ui-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/soft-ui-dashboard on GitHub">Star</a>
-          <h6 class="mt-3">Thank you for sharing!</h6>
-          <a href="https://twitter.com/intent/tweet?text=Check%20Soft%20UI%20Dashboard%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
-            <i class="fab fa-twitter me-1" aria-hidden="true"></i> Tweet
-          </a>
-          <a href="https://www.facebook.com/sharer/sharer.php?u=https://www.creative-tim.com/product/soft-ui-dashboard" class="btn btn-dark mb-0 me-2" target="_blank">
-            <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> Share
-          </a>
-        </div>
       </div>
     </div>
   </div>
@@ -376,6 +332,7 @@
   <script src="./assets/js/core/bootstrap.min.js"></script>
   <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
   <script src="./assets/js/plugins/smooth-scrollbar.min.js"></script>
+  <script src="./assets/js/plugins/chartjs.min.js"></script>
   <script>
     var win = navigator.platform.indexOf('Win') > -1;
     if (win && document.querySelector('#sidenav-scrollbar')) {

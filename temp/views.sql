@@ -135,7 +135,7 @@ CREATE VIEW log_purchase_v AS
             JOIN products p ON p.product_id = l.product_id
     ORDER BY time DESC;
 
--- View untuk menggabungkan field dari log product --> 
+-- View untuk menggabungkan field dari log product --> 11
 CREATE VIEW log_product_v AS 
     SELECT
         l.product_id,
@@ -147,5 +147,38 @@ CREATE VIEW log_product_v AS
         log_product l 
             JOIN products p ON p.product_id = l.product_id
     ORDER BY time DESC;
+
+-- View untuk menampilkan data lengkap dari customer --> 12
+CREATE VIEW customers_account AS 
+    SELECT
+        u.user_id,
+        u.name,
+        u.created_at,
+        u.email,
+        u.phone_number,
+        c.address,
+        c.last_purchase
+    FROM
+        users u
+            JOIN customers c ON u.user_id = c.user_id;
+
+-- View untuk menampilkan data lengkap sales --> 13
+CREATE VIEW sales_account AS 
+    SELECT
+        u.user_id,
+        u.name,
+        u.created_at,
+        u.email,
+        u.phone_number,
+        s.position,
+        s.salary,
+        s.gender,
+        s.background_ed,
+        s.employment_type
+    FROM
+        users u  
+            JOIN salesman s ON u.user_id = s.user_id;
+
+
 
 

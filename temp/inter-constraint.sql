@@ -20,3 +20,11 @@ FOREIGN KEY (user_id)
 REFERENCES users(user_id)
 ON DELETE CASCADE
 ON UPDATE CASCADE;
+
+-- Constraint untuk users -> orders
+ALTER TABLE orders 
+ADD CONSTRAINT orders_users_NR
+FOREIGN KEY (user_id)
+REFERENCES users(user_id)
+ON DELETE SET NULL
+ON UPDATE RESTRICT;
