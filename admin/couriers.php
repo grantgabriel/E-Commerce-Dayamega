@@ -70,7 +70,7 @@ while ($row = mysqli_fetch_array($query)) {
                 </g>
               </svg>
             </div>
-            <span class="nav-link-text ms-1">Sales Data</span>
+            <span class="nav-link-text ms-1">Couriers Data</span>
           </a>
         </li>
         <li class="nav-item">
@@ -94,7 +94,7 @@ while ($row = mysqli_fetch_array($query)) {
           </a>
         </li>
         <li class="nav-item">
-          <a class="nav-link  " href="couriers.php">
+          <a class="nav-link  " href="sales.php">
             <div class="icon icon-shape icon-sm shadow border-radius-md bg-white text-center me-2 d-flex align-items-center justify-content-center">
               <svg width="12px" height="12px" viewBox="0 0 43 36" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
                 <title>credit-card</title>
@@ -110,7 +110,7 @@ while ($row = mysqli_fetch_array($query)) {
                 </g>
               </svg>
             </div>
-            <span class="nav-link-text ms-1">Couriers Data</span>
+            <span class="nav-link-text ms-1">Sales Data</span>
           </a>
         </li>
         <li class="nav-item">
@@ -230,7 +230,7 @@ while ($row = mysqli_fetch_array($query)) {
     <!-- End Navbar -->
     <div class="card">
       <div class="card-header pb-0 px-3">
-        <h6 class="mb-0">Couriers Information</h6>
+        <h6 class="mb-0">Sales Information</h6>
       </div>
       <div class="card-body pt-4 p-3">
         <ul class="list-group">
@@ -265,8 +265,8 @@ while ($row = mysqli_fetch_array($query)) {
                   require "../includes/db_connect.php";
                   $user_id = $_POST['user_id'];
 
-                  $delete_sales_query = "CALL deleteSales('$user_id')";
-                  $delete_sales_sql = mysqli_query($connect, $delete_sales_query);
+                  $delete_customer_query = "CALL deleteCustomers('$user_id')";
+                  $delete_customer_sql = mysqli_query($connect, $delete_customer_query);
                   echo '<meta http-equiv="refresh" content="1">';
                 }
             ?>

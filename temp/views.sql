@@ -179,6 +179,19 @@ CREATE VIEW sales_account AS
         users u  
             JOIN salesman s ON u.user_id = s.user_id;
 
+-- View untuk menggabungkan data lengkap courier --> 14
+CREATE VIEW couriers_account AS 
+    SELECT
+        u.user_id,
+        u.name,
+        u.created_at,
+        u.email,
+        u.phone_number,
+        c.hourly_fee,
+        c.vehicle
+    FROM
+        users u
+            JOIN couriers c ON u.user_id = c.user_id;
 
 
 
