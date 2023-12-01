@@ -237,20 +237,18 @@ while ($row = mysqli_fetch_array($query)) {
         <?php
             require "../includes/db_connect.php";
 
-            $sales_account_sql = "SELECT * FROM sales_account";
-            $sales_account_query = mysqli_query($connect, $sales_account_sql);
+            $couriers_account_sql = "SELECT * FROM couriers_account";
+            $couriers_account_query = mysqli_query($connect, $couriers_account_sql);
 
-            while ($data = mysqli_fetch_assoc($sales_account_query)) {
+            while ($data = mysqli_fetch_assoc($couriers_account_query)) {
           ?>
           <li class="list-group-item border-0 d-flex p-4 mb-2 bg-gray-100 border-radius-lg">
             <div class="d-flex flex-column">
               <h6 class="text-sm"><b><?= $data['name'] ?></b> - <i><?= $data['user_id'] ?></i></h6>
-              <h6 class="mb-3 text-xs"><i><?= $data['position'] ?></i> - <?= $data['created_at'] ?></h6>
+              <h6 class="mb-3 text-xs"><i>Couriers</i> - <?= $data['created_at'] ?></h6>
               <span class="mb-2 text-xs">Email Address: <span class="text-dark ms-sm-2 font-weight-bold"><?= $data['email'] ?></span></span>
-              <span class="mb-2 text-xs">Gender: <span class="text-dark font-weight-bold ms-sm-2"><?= $data['gender'] ?></span></span>
-              <span class="mb-2 text-xs">Background Education: <span class="text-dark font-weight-bold ms-sm-2"><?= $data['background_ed'] ?></span></span>
-              <span class="mb-2 text-xs">Employment Type: <span class="text-dark font-weight-bold ms-sm-2"><?= $data['employment_type'] ?></span></span>
-              <span class="mb-2 text-xs">Salary: <span class="text-dark font-weight-bold ms-sm-2"><?= $data['salary'] ?></span></span>
+              <span class="mb-2 text-xs">Hourly Fee: <span class="text-dark font-weight-bold ms-sm-2"><?= $data['hourly_fee'] ?></span></span>
+              <span class="mb-2 text-xs">Vehicle: <span class="text-dark font-weight-bold ms-sm-2"><?= $data['vehicle'] ?></span></span>
               <span class="text-xs">Phone Number: <span class="text-dark ms-sm-2 font-weight-bold"><?= $data['phone_number'] ?></span></span>
             </div>
             <div class="ms-auto text-end">
@@ -265,8 +263,8 @@ while ($row = mysqli_fetch_array($query)) {
                   require "../includes/db_connect.php";
                   $user_id = $_POST['user_id'];
 
-                  $delete_customer_query = "CALL deleteCustomers('$user_id')";
-                  $delete_customer_sql = mysqli_query($connect, $delete_customer_query);
+                  $delete_couriers_query = "CALL deleteCouriers('$user_id')";
+                  $delete_couriers_sql = mysqli_query($connect, $delete_couriers_query);
                   echo '<meta http-equiv="refresh" content="1">';
                 }
             ?>
