@@ -32,6 +32,45 @@
     $monthlySoldProduct[$i] = $count_monthly_sold_products['mSold'];
   }
 
+  $total_products_sql = "SELECT totalProducts() AS totalProducts";
+  $total_products_query = mysqli_query($connect, $total_products_sql);
+  $totalProducts = mysqli_fetch_assoc($total_products_query);
+  $totalProducts = $totalProducts['totalProducts'];
+
+  $total_stocks_sql = "SELECT totalStocks() AS totalStocks";
+  $total_stocks_query = mysqli_query($connect, $total_stocks_sql);
+  $totalStocks = mysqli_fetch_assoc($total_stocks_query);
+  $totalStocks = $totalStocks['totalStocks'];
+
+  $count_monthly_sold_products_sql = "SELECT countMonthlySoldProducts('$i') as mSold";
+  $count_monthly_sold_products_query = mysqli_query($connect, $count_monthly_sold_products_sql);
+  $count_monthly_sold_products = mysqli_fetch_assoc($count_monthly_sold_products_query);
+  $monthlySoldProduct[$i] = $count_monthly_sold_products['mSold'];
+
+  $count_unconfirmed_packages_sql = "SELECT countUnconfirmedPackages() as fUnconfirmedPackages";
+  $count_unconfirmed_packages_query = mysqli_query($connect, $count_unconfirmed_packages_sql);
+  $count_unconfirmed_packages = mysqli_fetch_assoc($count_unconfirmed_packages_query);
+  $unconfirmedPackages = $count_unconfirmed_packages['fUnconfirmedPackages'];
+
+  $count_confirmed_packages_sql = "SELECT countConfirmedPackages() as fConfirmedPackages";
+  $count_confirmed_packages_query = mysqli_query($connect, $count_confirmed_packages_sql);
+  $count_confirmed_packages = mysqli_fetch_assoc($count_confirmed_packages_query);
+  $confirmedPackages = $count_confirmed_packages['fConfirmedPackages'];
+  
+  $count_delivered_packages_sql = "SELECT countTotalDeliveredPackages() as fDeliveredPackages";
+  $count_delivered_packages_query = mysqli_query($connect, $count_delivered_packages_sql);
+  $count_delivered_packages = mysqli_fetch_assoc($count_delivered_packages_query);
+  $deliveredPackages = $count_delivered_packages['fDeliveredPackages'];
+  
+  $count_treshold_stocks_sql = "SELECT countTresholdStocks() AS fTresholdStocks";
+  $count_treshold_stocks_query = mysqli_query($connect, $count_treshold_stocks_sql);
+  $count_treshold_stocks = mysqli_fetch_assoc($count_treshold_stocks_query);
+  $tresholdStocks = $count_treshold_stocks['fTresholdStocks'];
+
+  $count_out_of_stocks_sql = "SELECT countOutOfStocks() as fOutOfStocks";
+  $count_out_of_stocks_query = mysqli_query($connect, $count_out_of_stocks_sql);
+  $count_out_of_stocks = mysqli_fetch_assoc($count_out_of_stocks_query);
+  $outOfStocks = $count_out_of_stocks['fOutOfStocks'];
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -275,10 +314,10 @@
               <div class="row">
                 <div class="col-8">
                   <div class="numbers">
-                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Money</p>
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Products Sold</p>
                     <h5 class="font-weight-bolder mb-0">
-                      $53,000
-                      <span class="text-success text-sm font-weight-bolder">+55%</span>
+                      <?= $deliveredPackages ?>
+                      <span class="text-success text-sm font-weight-bolder">+</span>
                     </h5>
                   </div>
                 </div>
@@ -297,10 +336,10 @@
               <div class="row">
                 <div class="col-8">
                   <div class="numbers">
-                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Today's Users</p>
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Treshold Stocks</p>
                     <h5 class="font-weight-bolder mb-0">
-                      2,300
-                      <span class="text-success text-sm font-weight-bolder">+3%</span>
+                      <?= $tresholdStocks ?>
+                      <span class="text-danger text-sm font-weight-bolder">-</span>
                     </h5>
                   </div>
                 </div>
@@ -319,38 +358,16 @@
               <div class="row">
                 <div class="col-8">
                   <div class="numbers">
-                    <p class="text-sm mb-0 text-capitalize font-weight-bold">New Clients</p>
+                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Run Of Stocks</p>
                     <h5 class="font-weight-bolder mb-0">
-                      +3,462
-                      <span class="text-danger text-sm font-weight-bolder">-2%</span>
+                      <?= $outOfStocks ?>
+                      <span class="text-danger text-sm font-weight-bolder">-</span>
                     </h5>
                   </div>
                 </div>
                 <div class="col-4 text-end">
                   <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
                     <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class="col-xl-3 col-sm-6">
-          <div class="card">
-            <div class="card-body p-3">
-              <div class="row">
-                <div class="col-8">
-                  <div class="numbers">
-                    <p class="text-sm mb-0 text-capitalize font-weight-bold">Sales</p>
-                    <h5 class="font-weight-bolder mb-0">
-                      $103,430
-                      <span class="text-success text-sm font-weight-bolder">+5%</span>
-                    </h5>
-                  </div>
-                </div>
-                <div class="col-4 text-end">
-                  <div class="icon icon-shape bg-gradient-primary shadow text-center border-radius-md">
-                    <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
                   </div>
                 </div>
               </div>
@@ -383,8 +400,8 @@
                   <canvas id="chart-bars" class="chart-canvas" height="170"></canvas>
                 </div>
               </div>
-              <h6 class="ms-2 mt-4 mb-0"> Active Users </h6>
-              <p class="text-sm ms-2"> (<span class="font-weight-bolder">+23%</span>) than last week </p>
+              <h6 class="ms-2 mt-4 mb-0"> Sold Products </h6>
+              <p class="text-sm ms-2"> <span class="font-weight-bolder">+95%</span> than last month </p>
               <div class="container border-radius-lg">
                 <div class="row">
                   <div class="col-3 py-3 ps-0">
@@ -404,11 +421,11 @@
                           </g>
                         </svg>
                       </div>
-                      <p class="text-xs mt-1 mb-0 font-weight-bold">Users</p>
+                      <p class="text-xs mt-1 mb-0 font-weight-bold">Products</p>
                     </div>
-                    <h4 class="font-weight-bolder">36K</h4>
-                    <div class="progress w-75">
-                      <div class="progress-bar bg-dark w-60" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
+                    <h4 class="font-weight-bolder"><?= $totalProducts ?></h4>
+                    <div class="progress w-0">
+                      <div class="progress-bar bg-dark w-0" role="progressbar" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-3 py-3 ps-0">
@@ -430,11 +447,11 @@
                           </g>
                         </svg>
                       </div>
-                      <p class="text-xs mt-1 mb-0 font-weight-bold">Clicks</p>
+                      <p class="text-xs mt-1 mb-0 font-weight-bold">Stocks</p>
                     </div>
-                    <h4 class="font-weight-bolder">2m</h4>
-                    <div class="progress w-75">
-                      <div class="progress-bar bg-dark w-90" role="progressbar" aria-valuenow="90" aria-valuemin="0" aria-valuemax="100"></div>
+                    <h4 class="font-weight-bolder"><?= $totalStocks ?></h4>
+                    <div class="progress w-0">
+                      <div class="progress-bar bg-dark w-0" role="progressbar" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-3 py-3 ps-0">
@@ -454,11 +471,11 @@
                           </g>
                         </svg>
                       </div>
-                      <p class="text-xs mt-1 mb-0 font-weight-bold">Sales</p>
+                      <p class="text-xs mt-1 mb-0 font-weight-bold">Confirmed</p>
                     </div>
-                    <h4 class="font-weight-bolder">435$</h4>
-                    <div class="progress w-75">
-                      <div class="progress-bar bg-dark w-30" role="progressbar" aria-valuenow="30" aria-valuemin="0" aria-valuemax="100"></div>
+                    <h4 class="font-weight-bolder"><?= $confirmedPackages ?></h4>
+                    <div class="progress w-0">
+                      <div class="progress-bar bg-dark w-0" role="progressbar" aria-valuenow="100" aria-valuemin="100" aria-valuemax="100"></div>
                     </div>
                   </div>
                   <div class="col-3 py-3 ps-0">
@@ -479,11 +496,11 @@
                           </g>
                         </svg>
                       </div>
-                      <p class="text-xs mt-1 mb-0 font-weight-bold">Items</p>
+                      <p class="text-xs mt-1 mb-0 font-weight-bold">Unconfirmed</p>
                     </div>
-                    <h4 class="font-weight-bolder">43</h4>
-                    <div class="progress w-75">
-                      <div class="progress-bar bg-dark w-50" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    <h4 class="font-weight-bolder"><?= $unconfirmedPackages ?></h4>
+                    <div class="progress w-0">
+                      <div class="progress-bar bg-dark w-0" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
                     </div>
                   </div>
                 </div>
@@ -621,18 +638,6 @@
           <input class="form-check-input mt-1 ms-auto" type="checkbox" id="navbarFixed" onclick="navbarFixed(this)">
         </div>
         <hr class="horizontal dark my-sm-4">
-        <!-- <a class="btn bg-gradient-dark w-100" href="/product/soft-ui-dashboard">Free Download</a>
-        <a class="btn btn-outline-dark w-100" href="/learning-lab/bootstrap/license/soft-ui-dashboard">View documentation</a>
-        <div class="w-100 text-center">
-          <a class="github-button" href="https://github.com/creativetimofficial/soft-ui-dashboard" data-icon="octicon-star" data-size="large" data-show-count="true" aria-label="Star creativetimofficial/soft-ui-dashboard on GitHub">Star</a>
-          <h6 class="mt-3">Thank you for sharing!</h6>
-          <a href="https://twitter.com/intent/tweet?text=Check%20Soft%20UI%20Dashboard%20made%20by%20%40CreativeTim%20%23webdesign%20%23dashboard%20%23bootstrap5&amp;url=https%3A%2F%2Fwww.creative-tim.com%2Fproduct%2Fsoft-ui-dashboard" class="btn btn-dark mb-0 me-2">
-            <i class="fab fa-twitter me-1" aria-hidden="true"></i> Tweet
-          </a>
-          <a href="https://www.facebook.com/sharer/sharer.php?u=/product/soft-ui-dashboard" class="btn btn-dark mb-0 me-2">
-            <i class="fab fa-facebook-square me-1" aria-hidden="true"></i> Share
-          </a>
-        </div> -->
       </div>
     </div>
   </div>

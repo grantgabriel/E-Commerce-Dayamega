@@ -216,3 +216,96 @@ BEGIN
 END &&
 DELIMITER ;
 
+-- Stored function untuk menghitung total produk yang ada -- 16
+DELIMITER &&
+CREATE FUNCTION totalProducts() RETURNS INT 
+DETERMINISTIC
+BEGIN
+    DECLARE total INT;
+    SELECT COUNT(*) INTO total
+    FROM products;
+
+    RETURN total;
+END &&
+DELIMITER ; 
+
+-- Stored function untuk menghitung jumlah kesuluruhan stock barang yang ada -- 17
+DELIMITER &&
+CREATE FUNCTION totalStocks() RETURNS INT 
+DETERMINISTIC
+BEGIN
+    DECLARE totalStocks INT;
+    SELECT SUM(stock) INTO totalStocks
+    FROM products;
+
+    RETURN totalStocks;
+END &&
+DELIMITER ;
+
+-- Stored function untuk menghitung total pesanan yang belum terkonfirmasi -- 18
+DELIMITER &&
+CREATE FUNCTION countUnconfirmedPackages() RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fUnconfirmedPackages INT;
+    
+    SELECT COUNT(*) INTO fUnconfirmedPackages FROM orders 
+    WHERE status = 'Unconfirmed';
+
+    RETURN fUnconfirmedPackages;
+END; &&
+DELIMITER ;
+
+-- Stored function untuk menghitung pesanan yang telah terkonfirmasi -- 19
+DELIMITER &&
+CREATE FUNCTION countConfirmedPackages() RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fConfirmedPackages INT;
+    
+    SELECT COUNT(*) INTO fConfirmedPackages FROM orders 
+    WHERE status = 'Confirmed';
+
+    RETURN fConfirmedPackages;
+END; &&
+DELIMITER ;
+
+-- Stored function untuk menghitung berapa banyak produk yang telah terjual -- 20
+DELIMITER &&
+CREATE FUNCTION countTotalDeliveredPackages() RETURNS INT
+DETERMINISTIC
+BEGIN
+    DECLARE fDeliveredPackages INT;
+    
+    SELECT COUNT(*) INTO fDeliveredPackages FROM orders 
+    WHERE status = 'Received';
+
+    RETURN fDeliveredPackages;
+END; &&
+DELIMITER ;
+
+-- Stored function untuk menghitung berapa banyak produk yang diambang batas habis stock -- 21
+DELIMITER &&
+CREATE FUNCTION countTresholdStocks() RETURNS INT 
+DETERMINISTIC
+BEGIN
+    DECLARE fTresholdStocks INT;
+
+    SELECT COUNT(*) INTO fTresholdStocks FROM treshold_stock;
+
+    RETURN fTresholdStocks;
+END &&
+DELIMITER ;
+
+-- Stored function untuk menghitung berapa banyak total produk yang stocknya telah habis -- 22
+DELIMITER &&
+CREATE FUNCTION countOutOfStocks() RETURNS INT 
+DETERMINISTIC
+BEGIN
+    DECLARE fOutOfStocks INT;
+
+    SELECT COUNT(*) INTO fOutOfStocks FROM empty_stock;
+
+    RETURN fOutOfStocks;
+END &&
+DELIMITER ;
