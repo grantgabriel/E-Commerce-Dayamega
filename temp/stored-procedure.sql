@@ -319,6 +319,19 @@ BEGIN
 END; &&
 DELIMITER ;
 
+-- Stored procedure untuk mengupdate stock product -- 17
+DELIMITER &&
+CREATE PROCEDURE updateItemStocks(
+    IN product_id_param CHAR(9),
+    IN stock_param INT
+)
+BEGIN
+    DECLARE converted_product_id CHAR(9) CHARACTER SET utf8mb4 COLLATE utf8mb4_general_ci;
+    SET converted_product_id = CONVERT(product_id_param USING utf8mb4);
+    UPDATE products SET stock = stock_param WHERE product_id = converted_product_id;
+END; &&
+DELIMITER ;
+
 
 --TEMPLATE
 DELIMITER &&

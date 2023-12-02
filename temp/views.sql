@@ -193,5 +193,18 @@ CREATE VIEW couriers_account AS
         users u
             JOIN couriers c ON u.user_id = c.user_id;
 
+-- View untuk menggabungkan field product dengan category nya juga --> 15
+CREATE VIEW all_products AS 
+    SELECT
+        p.product_id,
+        p.product_name,
+        p.stock,
+        c.category,
+        p.photo,
+        p.user_prices,
+        p.dealer_prices
+    FROM 
+        products p
+            JOIN categories c ON p.category_id = c.category_id;
 
 
