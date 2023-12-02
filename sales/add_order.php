@@ -231,9 +231,9 @@ while ($row = mysqli_fetch_array($query)) {
                 <nav aria-label="breadcrumb">
                     <ol class="breadcrumb bg-transparent mb-0 pb-0 pt-1 px-0 me-sm-6 me-5">
                         <li class="breadcrumb-item text-sm"><a class="opacity-5 text-dark" href="javascript:;">Pages</a></li>
-                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Add Product</li>
+                        <li class="breadcrumb-item text-sm text-dark active" aria-current="page">Add Order</li>
                     </ol>
-                    <h6 class="font-weight-bolder mb-0">Add Product</h6>
+                    <h6 class="font-weight-bolder mb-0">Add Order</h6>
                 </nav>
                 <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
                     <div class="ms-md-auto pe-md-3 d-flex align-items-center">
@@ -276,8 +276,8 @@ while ($row = mysqli_fetch_array($query)) {
                 <div class="container">
                     <div class="row justify-content-center">
                         <div class="col-lg-5 text-center mx-auto">
-                            <h1 class="text-white mb-2 mt-5">Add up your products!</h1>
-                            <p class="text-lead text-white">More product == more customers == more money!</p>
+                            <h1 class="text-white mb-2 mt-5">Someone buyin laptops?!</h1>
+                            <p class="text-lead text-white">Leggo <?= $name ?>! More money $$$</p>
                         </div>
                     </div>
                 </div>
@@ -287,13 +287,29 @@ while ($row = mysqli_fetch_array($query)) {
                     <div class="col-xl-7 col-lg-5 col-md-7 mx-auto">
                         <div class="card z-index-0">
                             <div class="card-header text-center pt-4">
-                                <h5>Product Form</h5>
+                                <h5>Order Form</h5>
                             </div>
                             <div class="card-body">
                                 <form role="form text-left" method="POST" name="sign-up-form">
-                                    <label></label>
+                                    <label>Product ID</label>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" placeholder="Report here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                        <input type="text" class="form-control" placeholder="Product ID here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                    </div>
+                                    <label>User ID</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="User ID here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                    </div>
+                                    <label>Delivery Address</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Delivery address here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                    </div>
+                                    <label>Status</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Status here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                    </div>
+                                    <label>Message</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Message here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
                                     </div>
                                     <div class="text-center">
                                         <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="report-button" id="submit">Reports!</button>
