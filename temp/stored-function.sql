@@ -112,16 +112,14 @@ DELIMITER ;
 -- JANGAN DISENTUH LAGI KODE INI UDAH BERJALAN YAA ALLAHH
 -- Jangan tanya, biarlah Tuhan dan hanya Tuhan yang paham
 DELIMITER &&
-CREATE FUNCTION monthlyTotal(month_name CHAR(3)) RETURNS DECIMAL(10, 2)
+CREATE FUNCTION monthlyTotal(month_param INT) RETURNS DECIMAL(10, 2)
 DETERMINISTIC
 BEGIN
     DECLARE profit DECIMAL(10, 2);
-    SET profit = (
-        SELECT SUM(total)
-        FROM orders
-        WHERE DATE_FORMAT(order_date, '%b') = month_name
-    );
-    RETURN COALESCE(profit, 0.00);
+
+    SELECT COALESCE(SUM(total), 0.00) INTO profit FROM orders WHERE MONTH(order_date) = month_param;
+
+    RETURN profit;
 END &&
 DELIMITER ;
 
@@ -187,7 +185,7 @@ END &&
 DELIMITER ;
 
 -- Stored function untuk menghitung total report yang sudah diselesaikan pada bulan tertentu -- 14
-4DELIMITER &&
+DELIMITER &&
 CREATE FUNCTION countMonthlyResolvedReports(input_month INT) RETURNS INT
 DETERMINISTIC
 BEGIN
@@ -199,6 +197,22 @@ BEGIN
     AND MONTH(time) = input_month;
 
     RETURN fResolvedReports;
+END &&
+DELIMITER ;
+
+-- Stored function untuk menghitung total produk yang terjual per bulan -- 15
+DELIMITER &&
+CREATE FUNCTION countMonthlySoldProducts(input_month INT) RETURNS INT   
+DETERMINISTIC
+BEGIN
+    DECLARE fSold INT;
+
+    SELECT COUNT(*) INTO fSold 
+    FROM orders 
+    WHERE MONTH(order_date) = input_month
+    AND status = 'Received';
+
+    RETURN fSold;
 END &&
 DELIMITER ;
 

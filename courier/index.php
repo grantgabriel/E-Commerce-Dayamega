@@ -294,7 +294,7 @@
                 </div>
               </div>
               <h6 class="ms-2 mt-4 mb-0"> Delivered Package </h6>
-              <p class="text-sm ms-2"> (<span class="font-weight-bolder">Deliver = </span>) more $$$ </p>
+              <p class="text-sm ms-2"><span class="font-weight-bolder">More deliver = </span> more $$$ </p>
               <div class="container border-radius-lg">
                 <div class="row">
                   <div class="col-3 py-3 ps-0 mt-3 m-3">
