@@ -91,6 +91,7 @@ CREATE VIEW unconfirmed_order_delivery AS
         u.name,
         p.product_name,
         delivery_address,
+        struct,
         total,
         order_date
     FROM
