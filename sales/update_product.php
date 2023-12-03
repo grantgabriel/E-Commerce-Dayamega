@@ -318,7 +318,7 @@
                                     <div class="mb-3">
                                         <input type="text" class="form-control" value="<?= $product['dealer_prices'] ?>" aria-label="Name" aria-describedby="email-addon" name="dealer_prices" id="name">
                                     </div>
-                                    <label>Dealer Prices</label>
+                                    <label>Stocks</label>
                                     <div class="mb-3">
                                         <input type="text" class="form-control" value="<?= $product['stock'] ?>" aria-label="Name" aria-describedby="email-addon" name="stock" id="name">
                                         <input type="text" hidden class="form-control" value="<?= $product['product_id'] ?>" aria-label="Name" aria-describedby="email-addon" name="product_id" id="name">

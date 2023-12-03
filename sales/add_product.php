@@ -42,7 +42,7 @@ while ($row = mysqli_fetch_array($query)) {
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
-<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
+    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0" href="#">
@@ -290,10 +290,10 @@ while ($row = mysqli_fetch_array($query)) {
                                 <h5>Product Form</h5>
                             </div>
                             <div class="card-body">
-                                <form role="form text-left" method="POST" name="sign-up-form">
+                                <form role="form text-left" method="POST" enctype="multipart/form-data">
                                     <label></label>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" placeholder="Report here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                        <input type="text" class="form-control" placeholder=" here..." aria-label="Name" aria-describedby="email-addon" name="" accept="image/*">
                                     </div>
                                     <div class="text-center">
                                         <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="report-button" id="submit">Reports!</button>
@@ -302,12 +302,12 @@ while ($row = mysqli_fetch_array($query)) {
                                 <?php
                                     require "../includes/db_connect.php";
 
-                                    if(isset($_POST['report-button'])) {
-                                        $report = $_POST['report'];
-                                        $report_query = "CALL reportsIssue('$id', '$report')";
-                                        
-                                        $report_sql = mysqli_query($connect, $report_query);
-                                    }
+                                    // if (isset($_POST['report-button'])) {
+                                    //     $report = $_POST['report'];
+                                    //     $report_query = "CALL reportsIssue('$id', '$report')";
+
+                                    //     $report_sql = mysqli_query($connect, $report_query);
+                                    // }
                                 ?>
                             </div>
                         </div>

@@ -14,6 +14,71 @@ while ($row = mysqli_fetch_array($query)) {
     $name = $row['name'];
 }
 
+function generateUniqueID()
+{
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $uniqueID = '';
+    $idLength = 10;
+
+    for ($i = 0; $i < $idLength; $i++) {
+        $uniqueID .= $characters[rand(0, strlen($characters) - 1)];
+    }
+
+    return $uniqueID;
+}
+
+$newFileName;
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"]["name"])) {
+    $uploadDir = 'C:/laragon/www/E-Commerce-Dayamega/media/structs/'; // Directory where uploaded images will be saved
+    $randomStr = uniqid(); // Generate a random string
+    $date = date('Y-m-d'); // Get current date
+
+    // Get the file information
+    $fileName = basename($_FILES["image"]["name"]);
+    $fileTmp = $_FILES["image"]["tmp_name"];
+
+    // Extract file extension
+    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+    // Create a unique filename using current date, random string, and file extension
+    $newFileName = $date . '-' . $randomStr . '.' . $fileExtension;
+
+    // Move the uploaded file to the specified directory with the new filename
+    $destination = $uploadDir . $newFileName;
+    if (move_uploaded_file($fileTmp, $destination)) {
+        echo "";
+    } else {
+        echo "Error uploading file.";
+    }
+
+    
+}
+
+if (isset($_POST['order-button'])) {
+    $order_id = generateUniqueID();
+    $product_id = $_POST['product_id'];
+    $user_id = $_POST['user_id'];
+
+    $total_sql = "SELECT getDealerPrices('$product_id') AS total";
+    $total_query = mysqli_query($connect, $total_sql);
+    $total = mysqli_fetch_assoc($total_query);
+    $total = $total['total'];
+
+    $delivery_address = $_POST['delivery_address'];
+
+    $courier_sql = "SELECT getRandomCourierUserId() AS courier";
+    $courier_query = mysqli_query($connect, $courier_sql);
+    $courier = mysqli_fetch_assoc($courier_query);
+    $courier = $courier['courier'];
+
+    $status = $_POST['status'];
+    $message = $_POST['message'];
+
+    $order_query = "INSERT INTO orders VALUES('$order_id', '$product_id', '$user_id', '$total', '$delivery_address', NULL, NOW(), '$courier', '$status', '$message', '$newFileName')";
+    $order_sql = mysqli_query($connect, $order_query);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +89,7 @@ while ($row = mysqli_fetch_array($query)) {
     <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="./assets/img/logo.png">
     <title>
-        Courier's Dashboard
+        Sales Dashboard
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -42,7 +107,7 @@ while ($row = mysqli_fetch_array($query)) {
 </head>
 
 <body class="g-sidenav-show  bg-gray-100">
-<aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
+    <aside class="sidenav navbar navbar-vertical navbar-expand-xs border-0 border-radius-xl my-3 fixed-start ms-3 " id="sidenav-main">
         <div class="sidenav-header">
             <i class="fas fa-times p-3 cursor-pointer text-secondary opacity-5 position-absolute end-0 top-0 d-none d-xl-none" aria-hidden="true" id="iconSidenav"></i>
             <a class="navbar-brand m-0" href="#">
@@ -277,7 +342,7 @@ while ($row = mysqli_fetch_array($query)) {
                     <div class="row justify-content-center">
                         <div class="col-lg-5 text-center mx-auto">
                             <h1 class="text-white mb-2 mt-5">Someone buyin laptops?!</h1>
-                            <p class="text-lead text-white">Leggo <?= $name ?>! More money $$$</p>
+                            <p class="text-lead text-white">Leggo <?= $name ?>! More $$$</p>
                         </div>
                     </div>
                 </div>
@@ -290,41 +355,35 @@ while ($row = mysqli_fetch_array($query)) {
                                 <h5>Order Form</h5>
                             </div>
                             <div class="card-body">
-                                <form role="form text-left" method="POST" name="sign-up-form">
+                                <form role="form text-left" method="POST" enctype="multipart/form-data">
                                     <label>Product ID</label>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" placeholder="Product ID here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                        <input type="text" class="form-control" placeholder="Product ID here..." aria-label="Name" aria-describedby="email-addon" name="product_id" id="product_id">
                                     </div>
                                     <label>User ID</label>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" placeholder="User ID here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                        <input type="text" class="form-control" placeholder="User ID here..." aria-label="Name" value="<?= $id ?>" aria-describedby="email-addon" name="user_id" id="user_id">
                                     </div>
                                     <label>Delivery Address</label>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" placeholder="Delivery address here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                        <input type="text" class="form-control" placeholder="Delivery address here..." aria-label="Name" aria-describedby="email-addon" name="delivery_address" id="delivery_address">
                                     </div>
                                     <label>Status</label>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" placeholder="Status here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                        <input type="text" class="form-control" placeholder="Status here..." aria-label="Name" aria-describedby="email-addon" name="status" id="status">
                                     </div>
                                     <label>Message</label>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" placeholder="Message here..." aria-label="Name" aria-describedby="email-addon" name="report" id="name">
+                                        <input type="text" class="form-control" placeholder="Message here..." aria-label="Name" aria-describedby="email-addon" name="message" id="message">
+                                    </div>
+                                    <label >Structs</label>
+                                    <div class="mb-3">
+                                        <input type="file" class="form-control" placeholder="Report here..." aria-label="Name" aria-describedby="email-addon" name="image" accept="image/*">
                                     </div>
                                     <div class="text-center">
-                                        <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="report-button" id="submit">Reports!</button>
+                                        <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="order-button" id="submit">Add Order!</button>
                                     </div>
                                 </form>
-                                <?php
-                                    require "../includes/db_connect.php";
-
-                                    if(isset($_POST['report-button'])) {
-                                        $report = $_POST['report'];
-                                        $report_query = "CALL reportsIssue('$id', '$report')";
-                                        
-                                        $report_sql = mysqli_query($connect, $report_query);
-                                    }
-                                ?>
                             </div>
                         </div>
                     </div>
@@ -409,162 +468,6 @@ while ($row = mysqli_fetch_array($query)) {
     <script src="./assets/js/plugins/perfect-scrollbar.min.js"></script>
     <script src="./assets/js/plugins/smooth-scrollbar.min.js"></script>
     <script src="./assets/js/plugins/chartjs.min.js"></script>
-    <script>
-        var ctx = document.getElementById("chart-bars").getContext("2d");
-        new Chart(ctx, {
-            type: "bar",
-            data: {
-                labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                datasets: [{
-                    label: "Delivered",
-                    tension: 0.4,
-                    borderWidth: 0,
-                    borderRadius: 4,
-                    borderSkipped: false,
-                    backgroundColor: "#fff",
-                    data: [<?= $apr ?>, <?= $may ?>, <?= $jun ?>, <?= $jul ?>, <?= $aug ?>, <?= $sep ?>, <?= $oct ?>, <?= $nov ?>, <?= $dec ?>],
-                    maxBarThickness: 6
-                }, ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false,
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
-                scales: {
-                    y: {
-                        grid: {
-                            drawBorder: false,
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                        },
-                        ticks: {
-                            suggestedMin: 0,
-                            suggestedMax: 500,
-                            beginAtZero: true,
-                            padding: 15,
-                            font: {
-                                size: 14,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                            color: "#fff"
-                        },
-                    },
-                    x: {
-                        grid: {
-                            drawBorder: false,
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false
-                        },
-                        ticks: {
-                            display: false
-                        },
-                    },
-                },
-            },
-        });
-
-
-        var ctx2 = document.getElementById("chart-line").getContext("2d");
-
-        var gradientStroke1 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-        gradientStroke1.addColorStop(1, 'rgba(203,12,159,0.2)');
-        gradientStroke1.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-        gradientStroke1.addColorStop(0, 'rgba(203,12,159,0)'); //purple colors
-
-        var gradientStroke2 = ctx2.createLinearGradient(0, 230, 0, 50);
-
-        gradientStroke2.addColorStop(1, 'rgba(20,23,39,0.2)');
-        gradientStroke2.addColorStop(0.2, 'rgba(72,72,176,0.0)');
-        gradientStroke2.addColorStop(0, 'rgba(20,23,39,0)'); //purple colors
-
-        new Chart(ctx2, {
-            type: "line",
-            data: {
-                labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                datasets: [{
-                    label: "Delivered",
-                    tension: 0.4,
-                    borderWidth: 0,
-                    pointRadius: 0,
-                    borderColor: "#cb0c9f",
-                    borderWidth: 3,
-                    backgroundColor: gradientStroke1,
-                    fill: true,
-                    data: [<?= $apr ?>, <?= $may ?>, <?= $jun ?>, <?= $jul ?>, <?= $aug ?>, <?= $sep ?>, <?= $oct ?>, <?= $nov ?>, <?= $dec ?>],
-                    maxBarThickness: 6
-
-                }, ],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false,
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
-                scales: {
-                    y: {
-                        grid: {
-                            drawBorder: false,
-                            display: true,
-                            drawOnChartArea: true,
-                            drawTicks: false,
-                            borderDash: [5, 5]
-                        },
-                        ticks: {
-                            display: true,
-                            padding: 10,
-                            color: '#b2b9bf',
-                            font: {
-                                size: 11,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                    x: {
-                        grid: {
-                            drawBorder: false,
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                            borderDash: [5, 5]
-                        },
-                        ticks: {
-                            display: true,
-                            color: '#b2b9bf',
-                            padding: 20,
-                            font: {
-                                size: 11,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                },
-            },
-        });
-    </script>
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {

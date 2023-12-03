@@ -309,3 +309,16 @@ BEGIN
     RETURN fOutOfStocks;
 END &&
 DELIMITER ;
+
+-- Stored function untuk mengambil harga dari suatu barang -- 23
+DELIMITER &&
+CREATE FUNCTION getDealerPrices(product_id_param CHAR(9)) RETURNS DECIMAL(10, 2)
+DETERMINISTIC
+BEGIN
+    DECLARE p_dealer_price DECIMAL(10, 2);
+
+    SELECT dealer_prices INTO p_dealer_price FROM products WHERE BINARY product_id = BINARY product_id_param;
+
+    RETURN p_dealer_price;
+END; &&
+DELIMITER ;
