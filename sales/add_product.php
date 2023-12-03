@@ -14,6 +14,73 @@ while ($row = mysqli_fetch_array($query)) {
     $name = $row['name'];
 }
 
+function generateUniqueID() {
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $uniqueID = '';
+    $idLength = 9;
+
+    for ($i = 0; $i < $idLength; $i++) {
+        $uniqueID .= $characters[rand(0, strlen($characters) - 1)];
+    }
+
+    return $uniqueID;
+}
+
+$newFileName = "";
+
+if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["photo"]["name"])) {
+    $uploadDir = 'C:/laragon/www/E-Commerce-Dayamega/media/laptop-photos/'; // Directory where uploaded images will be saved
+    $randomStr = uniqid(); // Generate a random string
+    $date = date('Y-m-d'); // Get current date
+
+    // Get the file information
+    $fileName = basename($_FILES["photo"]["name"]);
+    $fileTmp = $_FILES["photo"]["tmp_name"];
+
+    // Extract file extension
+    $fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+
+    // Create a unique filename using current date, random string, and file extension
+    $newFileName = $date . '-' . $randomStr . '.' . $fileExtension;
+
+    // Move the uploaded file to the specified directory with the new filename
+    $destination = $uploadDir . $newFileName;
+    if (move_uploaded_file($fileTmp, $destination)) {
+        echo "";
+    } else {
+        echo "Error uploading file.";
+    }
+}
+
+if (isset($_POST['product-button'])) {
+    $product_id = generateUniqueID();
+    $product_name = $_POST['product_name'];
+    $stock = $_POST['stock'];
+    $category_id = $_POST['category_id'];
+    $photo = $newFileName;
+    $user_prices = $_POST['user_prices'];
+    $dealer_prices = $_POST['dealer_prices'];
+    $spec_display = $_POST['spec_display'];
+    $spec_ram = $_POST['spec_ram'];
+    $spec_proc = $_POST['spec_proc'];
+    $spec_gpu = $_POST['spec_gpu'];
+    $spec_storage = $_POST['spec_storage'];
+    $spec_audio = $_POST['spec_audio'];
+    $spec_battery = $_POST['spec_battery'];
+    $spec_weight = $_POST['spec_weight'];
+    $spec_connectivity = $_POST['spec_connectivity'];
+    $spec_camera = $_POST['spec_camera'];
+    $spec_extandable_ram = $_POST['spec_extandable_ram'];
+    $spec_extandable_ssd = $_POST['spec_extandable_ssd'];
+    $spec_dimension = $_POST['spec_dimension'];
+    $description = $_POST['description'];
+    $operating_system = $_POST['operating_system'];
+    $antivirus = $_POST['antivirus'];
+
+    $product_query = "CALL addItems('$product_id', '$product_name', $stock, '$category_id', '$photo', '$user_prices', '$dealer_prices', '$spec_display', '$spec_ram', '$spec_proc', '$spec_gpu', '$spec_storage', '$spec_audio', '$spec_battery', '$spec_weight', '$spec_connectivity', '$spec_camera', '$spec_extandable_ram', '$spec_extandable_ssd', '$spec_dimension', '$description', '$operating_system', '$antivirus')";
+    $product_sql = mysqli_query($connect, $product_query);
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -24,7 +91,7 @@ while ($row = mysqli_fetch_array($query)) {
     <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png">
     <link rel="icon" type="image/png" href="./assets/img/logo.png">
     <title>
-        Courier's Dashboard
+        Sales Dashboard
     </title>
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -277,7 +344,7 @@ while ($row = mysqli_fetch_array($query)) {
                     <div class="row justify-content-center">
                         <div class="col-lg-5 text-center mx-auto">
                             <h1 class="text-white mb-2 mt-5">Add up your products!</h1>
-                            <p class="text-lead text-white">More product == more customers == more money!</p>
+                            <p class="text-lead text-white">More product == more sales == more <i>$$$</i>!</p>
                         </div>
                     </div>
                 </div>
@@ -291,24 +358,98 @@ while ($row = mysqli_fetch_array($query)) {
                             </div>
                             <div class="card-body">
                                 <form role="form text-left" method="POST" enctype="multipart/form-data">
-                                    <label></label>
+                                    <label>Product Name</label>
                                     <div class="mb-3">
-                                        <input type="text" class="form-control" placeholder=" here..." aria-label="Name" aria-describedby="email-addon" name="" accept="image/*">
+                                        <input type="text" class="form-control" placeholder="Product name here..." name="product_name" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Stock</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Stock here..." name="stock" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Category ID</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Category ID here..." name="category_id" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Photo</label>
+                                    <div class="mb-3">
+                                        <input type="file" class="form-control" placeholder="Photo here..." name="photo" aria-label="Name" aria-describedby="email-addon" accept="image/*">
+                                    </div>
+                                    <label>User Prices</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="User prices here..." name="user_prices" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Dealer Prices</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Dealer prices here..." name="dealer_prices" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Display Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Display specification here..." name="spec_display" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>RAM Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="RAM specification here..." name="spec_ram" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Processor Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Proceessor specification here..." name="spec_proc" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>GPU Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="GPU specification here..." name="spec_gpu" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Storage Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Storage specification here..." name="spec_storage" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Audio Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Audio specification here..." name="spec_audio" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Battery Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Battery specification here..." name="spec_battery" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Weight Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Weight specification here..." name="spec_weight" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Connectivity Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Connectivity specification here..." name="spec_connectivity" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Camera Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Camera specification here..." name="spec_camera" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Extandable RAM Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Extandable RAM specification here..." name="spec_extandable_ram" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Extandable SSD Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Extandable SSD specification here..." name="spec_extandable_ssd" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Dimension Specification</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Dimension specification here..." name="spec_dimension" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Description</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Description here..." name="description" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Operating Systems</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="OS here..." name="operating_system" aria-label="Name" aria-describedby="email-addon">
+                                    </div>
+                                    <label>Antivirus</label>
+                                    <div class="mb-3">
+                                        <input type="text" class="form-control" placeholder="Antivirus here..." name="antivirus" aria-label="Name" aria-describedby="email-addon">
                                     </div>
                                     <div class="text-center">
-                                        <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="report-button" id="submit">Reports!</button>
+                                        <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="product-button" id="submit">Add Product!</button>
                                     </div>
                                 </form>
-                                <?php
-                                    require "../includes/db_connect.php";
-
-                                    // if (isset($_POST['report-button'])) {
-                                    //     $report = $_POST['report'];
-                                    //     $report_query = "CALL reportsIssue('$id', '$report')";
-
-                                    //     $report_sql = mysqli_query($connect, $report_query);
-                                    // }
-                                ?>
                             </div>
                         </div>
                     </div>

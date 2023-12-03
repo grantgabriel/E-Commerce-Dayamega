@@ -342,7 +342,7 @@ if (isset($_POST['order-button'])) {
                     <div class="row justify-content-center">
                         <div class="col-lg-5 text-center mx-auto">
                             <h1 class="text-white mb-2 mt-5">Someone buyin laptops?!</h1>
-                            <p class="text-lead text-white">Leggo <?= $name ?>! More $$$</p>
+                            <p class="text-lead text-white">Leggo <?= $name ?>! More money $$$</p>
                         </div>
                     </div>
                 </div>
