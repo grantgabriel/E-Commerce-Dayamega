@@ -206,7 +206,7 @@ while ($row = mysqli_fetch_array($query)) {
 					while ($data = mysqli_fetch_assoc($orders_query)) {
 				?>
 				<div style="display: flex; align-items: center; justify-content: center;">
-					<div style="width: 80%; background-color: #15161d; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 20px;">
+					<div style="width: 80%; background-color: #1e1f29; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 20px;">
 						<h4 style="text-align: center; color: #ffffff;">Orders #<?= $data['order_id'] ?></h4>
 						<p style="color: #ffffff;">Product Name:      <?= $data['product_name'] ?></p>
 						<p style="color: #ffffff;">Order Date:        <?= $data['order_date'] ?></p>

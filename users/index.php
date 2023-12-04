@@ -69,7 +69,22 @@ while ($row = mysqli_fetch_array($query)) {
 				</ul>
 				<ul class="header-links pull-right">
 					<li><a href="#"><i class="fa fa-dollar"></i> Pricelist </a></li>
-					<li><a href="#"><i class="fa fa-user-o"></i> <?= $name ?> </a></li>
+					<li>
+						<form action="" method="post" onsubmit="return confirm('Anda Yakin Mau Menghapus Akun?');">
+							<button style="all: unset; color: white;" name="delete-account" type="submit"><i class="fa fa-user-o"></i> 
+								<?= $name ?> 
+							</button>
+						</form>
+						<?php
+							if(isset($_POST['delete-account'])) {
+								require "../includes/db_connect.php";
+							
+								$delete_acc = "CALL deleteCustomers('$id')";
+								$delete_acc_query = mysqli_query($connect, $delete_acc);
+								echo '<script>window.location.href = "../index.php";</script>';
+							}
+						?>
+					</li>
 				</ul>
 			</div>
 		</div>
