@@ -2,9 +2,8 @@
 require "../includes/db_connect.php";
 
 $id = $_SESSION['id'];
-$product_id = $_POST['product_id'];
 
-$sql = "SELECT * FROM customers_account WHERE user_id = '$id'";
+$sql = "SELECT * FROM users WHERE user_id = '$id'";
 $query = mysqli_query($connect, $sql);
 
 if (!$query) {
@@ -14,38 +13,6 @@ if (!$query) {
 while ($row = mysqli_fetch_array($query)) {
 	$name = $row['name'];
 	$email = $row['email'];
-	$user_id = $row['user_id'];
-	$phone_number = $row['phone_number'];
-	$address = $row['address'];
-	$last_purchase = $row['last_purchase'];
-}
-
-
-function generateUniqueID()
-{
-	$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-	$uniqueID = '';
-	$idLength = 10;
-
-	for ($i = 0; $i < $idLength; $i++) {
-		$uniqueID .= $characters[rand(0, strlen($characters) - 1)];
-	}
-
-	return $uniqueID;
-}
-
-$sql = "SELECT * FROM all_product_data WHERE product_id = '$product_id'";
-$query = mysqli_query($connect, $sql);
-
-if (!$query) {
-	die("Query gagal" . mysqli_error($connect));
-}
-
-while ($row = mysqli_fetch_array($query)) {
-	$product_name = $row['product_name'];
-	$photo = $row['photo'];
-	$dealer_prices = $row['dealer_prices'];
-	$description = $row['description'];
 }
 ?>
 
@@ -56,9 +23,10 @@ while ($row = mysqli_fetch_array($query)) {
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<link rel="icon" type="image/png" href="../assets/img/dayamega.jpeg">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title>Checkout page!</title>
+	<title>Order Status</title>
 
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -82,11 +50,9 @@ while ($row = mysqli_fetch_array($query)) {
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
-		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
-		<![endif]-->
-	<link rel="icon" type="image/png" href="../assets/img/dayamega.jpeg">
-
+		<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+<![endif]-->
 </head>
 
 <body>
@@ -157,44 +123,11 @@ while ($row = mysqli_fetch_array($query)) {
 
 							<!-- Cart -->
 							<div class="dropdown">
-								<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
+								<a class="dropdown-toggle" href="orders.php" aria-expanded="true">
 									<i class="fa fa-shopping-cart"></i>
-									<span>Your Cart</span>
+									<span>Your Purchase</span>
 									<div class="qty">1</div>
 								</a>
-								<div class="cart-dropdown">
-									<div class="cart-list">
-										<div class="product-widget">
-											<div class="product-img">
-												<img src="./img/product01.png" alt="">
-											</div>
-											<div class="product-body">
-												<h3 class="product-name"><a href="#">product name goes here</a></h3>
-												<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
-											</div>
-											<button class="delete"><i class="fa fa-close"></i></button>
-										</div>
-
-										<div class="product-widget">
-											<div class="product-img">
-												<img src="./img/product02.png" alt="">
-											</div>
-											<div class="product-body">
-												<h3 class="product-name"><a href="#">product name goes here</a></h3>
-												<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
-											</div>
-											<button class="delete"><i class="fa fa-close"></i></button>
-										</div>
-									</div>
-									<div class="cart-summary">
-										<small>3 Item(s) selected</small>
-										<h5>SUBTOTAL: $2940.00</h5>
-									</div>
-									<div class="cart-btns">
-										<a href="#">View Cart</a>
-										<a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
-									</div>
-								</div>
 							</div>
 							<!-- /Cart -->
 
@@ -218,7 +151,6 @@ while ($row = mysqli_fetch_array($query)) {
 	</header>
 	<!-- /HEADER -->
 
-
 	<!-- NAVIGATION -->
 	<nav id="navigation">
 		<!-- container -->
@@ -227,7 +159,7 @@ while ($row = mysqli_fetch_array($query)) {
 			<div id="responsive-nav">
 				<!-- NAV -->
 				<ul class="main-nav nav navbar-nav">
-					<li><a href="index.php">Home</a></li>
+					<li class=""><a href="index.php">Home</a></li>
 					<li><a href="products.php">Products</a></li>
 					<li><a href="#">Categories</a></li>
 				</ul>
@@ -246,10 +178,10 @@ while ($row = mysqli_fetch_array($query)) {
 			<!-- row -->
 			<div class="row">
 				<div class="col-md-12">
-					<h3 class="breadcrumb-header">Checkout</h3>
+					<h3 class="breadcrumb-header">Orders</h3>
 					<ul class="breadcrumb-tree">
 						<li><a href="index.php">Home</a></li>
-						<li class="active">Checkout</li>
+						<li class="active">orders</li>
 					</ul>
 				</div>
 			</div>
@@ -265,161 +197,27 @@ while ($row = mysqli_fetch_array($query)) {
 		<div class="container">
 			<!-- row -->
 			<div class="row">
-				<form method="POST" enctype="multipart/form-data">
-					<div class="col-md-7">
-						<!-- Billing Details -->
-						<div class="billing-details">
-							<div class="section-title">
-								<h3 class="title">Billing Profile</h3>
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="address" placeholder="Address" value="<?= $address ?>">
-							</div>
-							<div class="form-group">
-								<input class="input" type="text" name="phone_number" placeholder="Telephone" value="<?= $phone_number ?>">
-							</div>
-							<div class="form-group">
-								<label for="order_proof" style="padding: 10px 15px; font-size: 15px; color: #333; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
-									<span>Upload Proof</span>
-								</label>
-								<input id="order_proof" class="input" type="file" name="image" accept="image/*" style="display: none;">
-							</div>
-
-
-						</div>
-						<!-- /Billing Details -->
-						<!-- Shiping Details -->
-						<div class="shiping-details">
-							<div class="section-title">
-								<h3 class="title">Messages</h3>
-							</div>
-							<div class="input-checkbox">
-								<input type="checkbox" id="shiping-address">
-								<label for="shiping-address">
-									<span></span>
-									Got any messages?
-								</label>
-							</div>
-						</div>
-						<!-- /Shiping Details -->
-
-						<!-- Order notes -->
-						<div class="order-notes">
-							<textarea class="input" placeholder="Order Notes" name="messages"></textarea>
-						</div>
-						<!-- /Order notes -->
-					</div>
-
-					<!-- Order Details -->
-					<div class="col-md-5 order-details">
-						<div class="section-title text-center">
-							<h3 class="title">Your Order</h3>
-						</div>
-						<div class="order-summary">
-							<div class="order-col">
-								<div><strong>PRODUCT</strong></div>
-								<div><strong>TOTAL</strong></div>
-							</div>
-							<div class="order-products">
-								<div class="order-col">
-									<div>1x <?= $product_name ?></div>
-									<div>Rp <?= $dealer_prices ?>,-</div>
-								</div>
-							</div>
-							<div class="order-col">
-								<div>Shiping</div>
-								<div><strong>FREE</strong></div>
-							</div>
-							<div class="order-col">
-								<div><strong>TOTAL</strong></div>
-								<div><strong class="order-total">Rp <?= $dealer_prices ?>,-</strong></div>
-							</div>
-						</div>
-						<div class="payment-method">
-							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-1">
-								<label for="payment-1">
-									<span></span>
-									Direct Bank Transfer
-								</label>
-								<div class="caption">
-									<p>Please upload your proof of transfers in the form asides</p>
-								</div>
-							</div>
-							<div class="input-radio">
-								<input type="radio" name="payment" id="payment-2">
-								<label for="payment-2">
-									<span></span>
-									Cheque Payment
-								</label>
-								<div class="caption">
-									<p>Please upload your proof of cheque in the form asides.</p>
-								</div>
-							</div>
-						</div>
-						<div class="input-checkbox">
-							<input type="checkbox" id="terms">
-							<label for="terms">
-								<span></span>
-								I've read and accept the <a href="#">terms & conditions</a>
-							</label>
-						</div>
-						<input hidden name='product_id' type='text' value="<?= $product_id ?>">
-						<button class="primary-btn order-submit" type="submit" name="order-button">Place Order!</button>
-					</div>
-					<!-- /Order Details -->
-				</form>
 				<?php
-				require "../includes/db_connect.php";
+					require "../includes/db_connect.php";
 
+					$orders_sql = "SELECT * FROM all_orders_data WHERE user_id = '$id' ORDER BY order_date DESC";
+					$orders_query = mysqli_query($connect, $orders_sql);
 
-				$newFileName = "";
-
-				if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"]["name"])) {
-					$uploadDir = 'C:/laragon/www/E-Commerce-Dayamega/media/structs/'; // Directory where uploaded images will be saved
-					$randomStr = uniqid(); // Generate a random string
-					$date = date('Y-m-d'); // Get current date
-				
-					// Get the file information
-					$fileName = basename($_FILES["image"]["name"]);
-					$fileTmp = $_FILES["image"]["tmp_name"];
-				
-					// Extract file extension
-					$fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
-				
-					// Create a unique filename using current date, random string, and file extension
-					$newFileName = $date . '-' . $randomStr . '.' . $fileExtension;
-				
-					// Move the uploaded file to the specified directory with the new filename
-					$destination = $uploadDir . $newFileName;
-					if (move_uploaded_file($fileTmp, $destination)) {
-						echo "";
-					} else {
-						echo "Error uploading file.";
-					}
-				}
-				
-				if (isset($_POST['order-button'])) {
-					$order_id = generateUniqueID();
-					$product_id = $_POST['product_id'];
-					$address = $_POST['address'];
-					$phone_number = $_POST['phone_number'];
-				
-					$courier_sql = "SELECT getRandomCourierUserId() AS courier";
-					$courier_query = mysqli_query($connect, $courier_sql);
-					$courier = mysqli_fetch_assoc($courier_query);
-					$courier = $courier['courier'];
-				
-					$status = 'Unconfirmed';
-					$message = $_POST['messages'];
-				
-					$order_query = "INSERT INTO orders VALUES('$order_id', '$product_id', '$id', '$dealer_prices', '$address', '$phone_number', NOW(), '$courier', '$status', '$message', '$newFileName')";
-					$order_sql = mysqli_query($connect, $order_query);
-				
-					echo '<script>window.location.href = "index.php";</script>';
-				}
-				
+					while ($data = mysqli_fetch_assoc($orders_query)) {
 				?>
+				<div style="display: flex; align-items: center; justify-content: center;">
+					<div style="width: 80%; background-color: #15161d; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 20px;">
+						<h4 style="text-align: center; color: #ffffff;">Orders #<?= $data['order_id'] ?></h4>
+						<p style="color: #ffffff;">Product Name:      <?= $data['product_name'] ?></p>
+						<p style="color: #ffffff;">Order Date:        <?= $data['order_date'] ?></p>
+						<p style="color: #ffffff;">Courier Name:      <?= $data['courier_name'] ?></p>
+						<p style="color: #ffffff;">Delivery Address:  <?= $data['delivery_address'] ?></p>
+						<p style="color: #ffffff;">Total:             <?= $data['product_name'] ?></p>
+						<p style="color: #ffffff;">Message:           <?= $data['message'] ?></p>
+						<p style="color: #ffffff;">Status:            <?= $data['status'] ?></p>
+					</div>
+				</div>
+				<?php } ?>
 			</div>
 			<!-- /row -->
 		</div>

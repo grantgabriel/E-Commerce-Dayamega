@@ -223,13 +223,23 @@ CREATE VIEW product_carousels AS
         products p
             JOIN categories c ON p.category_id = c.category_id;
 
--- View untuk mengambil data lengkap dari sebuah produk untuk detailnya.
+-- View untuk mengambil data lengkap dari sebuah produk untuk detailnya. --> 17
 CREATE VIEW all_product_data AS 
     SELECT
-    p.*,
-    c.category,
-    (SELECT COUNT(product_id) FROM orders WHERE product_id = p.product_id) AS sold_products
+        p.*,
+        c.category,
+        (SELECT COUNT(product_id) FROM orders WHERE product_id = p.product_id) AS sold_products
     FROM
         products p 
             JOIN categories c ON p.category_id = c.category_id;
-            
+
+-- View untuk mengambil semua field yang penting di tabel orders, dipakai di customers purchase status --> 18
+CREATE VIEW all_orders_data AS 
+    SELECT
+        o.*,
+        p.product_name,
+        u.name AS courier_name
+    FROM
+        orders o 
+            JOIN products p ON o.product_id = p.product_id
+            JOIN users u ON o.courier_id = u.user_id;

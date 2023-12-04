@@ -303,7 +303,7 @@ while ($row = mysqli_fetch_array($query)) {
                         <td>
                           <div class="d-flex px-2 py-1">
                             <div>
-                              <a href="..\media\structs\testing.jpg" target="_blank">
+                              <a href="..\media\structs\<?= $data['struct'] ?>" target="_blank">
                                 <img src="./assets/img/curved-images/curved-8.jpg" class="avatar avatar-sm me-3" alt="user1">
                               </a>
                             </div>

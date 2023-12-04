@@ -14,6 +14,11 @@ while ($row = mysqli_fetch_array($query)) {
 	$name = $row['name'];
 	$email = $row['email'];
 }
+
+$total_products_sql = "SELECT totalProducts() AS totalProducts";
+$total_products_query = mysqli_query($connect, $total_products_sql);
+$totalProducts = mysqli_fetch_assoc($total_products_query);
+$totalProducts = $totalProducts['totalProducts'];
 ?>
 
 <!DOCTYPE html>
@@ -23,10 +28,9 @@ while ($row = mysqli_fetch_array($query)) {
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<link rel="icon" type="image/png" href="../assets/img/dayamega.jpeg">
 	<!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
 
-	<title>Dayamega's E-Commerce</title>
+	<title>Product Dayamega's</title>
 
 	<!-- Google font -->
 	<link href="https://fonts.googleapis.com/css?family=Montserrat:400,500,700" rel="stylesheet">
@@ -50,8 +54,8 @@ while ($row = mysqli_fetch_array($query)) {
 	<!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
 	<!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
 	<!--[if lt IE 9]>
-			<script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
-			<script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+		  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
 		<![endif]-->
 
 </head>
@@ -96,9 +100,9 @@ while ($row = mysqli_fetch_array($query)) {
 						<div class="header-search">
 							<form>
 								<select class="input-select">
-									<!-- <option value="0">All Categories</option>
+									<option value="0">All Categories</option>
 									<option value="1">Category 01</option>
-									<option value="1">Category 02</option> -->
+									<option value="1">Category 02</option>
 								</select>
 								<input class="input" placeholder="Search here">
 								<button class="search-btn">Search</button>
@@ -115,18 +119,51 @@ while ($row = mysqli_fetch_array($query)) {
 								<a href="#">
 									<i class="fa fa-heart-o"></i>
 									<span>Your Wishlist</span>
-									<!-- <div class="qty"></div> -->
+									<div class="qty">2</div>
 								</a>
 							</div>
 							<!-- /Wishlist -->
 
 							<!-- Cart -->
 							<div class="dropdown">
-								<a class="dropdown-toggle" href="orders.php" aria-expanded="true">
+								<a class="dropdown-toggle" data-toggle="dropdown" aria-expanded="true">
 									<i class="fa fa-shopping-cart"></i>
-									<span>Your Purchase</span>
-									<div class="qty">1</div>
+									<span>Your Cart</span>
+									<div class="qty">3</div>
 								</a>
+								<div class="cart-dropdown">
+									<div class="cart-list">
+										<div class="product-widget">
+											<div class="product-img">
+												<img src="./img/product01.png" alt="">
+											</div>
+											<div class="product-body">
+												<h3 class="product-name"><a href="#">product name goes here</a></h3>
+												<h4 class="product-price"><span class="qty">1x</span>$980.00</h4>
+											</div>
+											<button class="delete"><i class="fa fa-close"></i></button>
+										</div>
+
+										<div class="product-widget">
+											<div class="product-img">
+												<img src="./img/product02.png" alt="">
+											</div>
+											<div class="product-body">
+												<h3 class="product-name"><a href="#">product name goes here</a></h3>
+												<h4 class="product-price"><span class="qty">3x</span>$980.00</h4>
+											</div>
+											<button class="delete"><i class="fa fa-close"></i></button>
+										</div>
+									</div>
+									<div class="cart-summary">
+										<small>3 Item(s) selected</small>
+										<h5>SUBTOTAL: $2940.00</h5>
+									</div>
+									<div class="cart-btns">
+										<a href="#">View Cart</a>
+										<a href="#">Checkout <i class="fa fa-arrow-circle-right"></i></a>
+									</div>
+								</div>
 							</div>
 							<!-- /Cart -->
 
@@ -158,8 +195,8 @@ while ($row = mysqli_fetch_array($query)) {
 			<div id="responsive-nav">
 				<!-- NAV -->
 				<ul class="main-nav nav navbar-nav">
-					<li class="active"><a href="#">Home</a></li>
-					<li><a href="products.php">Products</a></li>
+					<li class=""><a href="index.php">Home</a></li>
+					<li class="active"><a href="#">Products</a></li>
 					<li><a href="#">Categories</a></li>
 				</ul>
 				<!-- /NAV -->
@@ -170,59 +207,25 @@ while ($row = mysqli_fetch_array($query)) {
 	</nav>
 	<!-- /NAVIGATION -->
 
-	<!-- SECTION -->
-	<div class="section">
+	<!-- BREADCRUMB -->
+	<div id="breadcrumb" class="section">
 		<!-- container -->
 		<div class="container">
 			<!-- row -->
 			<div class="row">
-				<!-- shop -->
-				<div class="col-md-4 col-xs-6">
-					<div class="shop">
-						<div class="shop-img">
-							<img src="./img/shop01.png" alt="">
-						</div>
-						<div class="shop-body">
-							<h3>Laptop<br>Collection</h3>
-							<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-						</div>
-					</div>
+				<div class="col-md-12">
+					<ul class="breadcrumb-tree">
+						<li><a href="index.php">Home</a></li>
+						<li><a href="#">Products</a></li>
+						<li class="active">All products (<?= $totalProducts ?> Results)</li>
+					</ul>
 				</div>
-				<!-- /shop -->
-
-				<!-- shop -->
-				<div class="col-md-4 col-xs-6">
-					<div class="shop">
-						<div class="shop-img">
-							<img src="./img/shop03.png" alt="">
-						</div>
-						<div class="shop-body">
-							<h3>Accessories<br>Collection</h3>
-							<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-						</div>
-					</div>
-				</div>
-				<!-- /shop -->
-
-				<!-- shop -->
-				<div class="col-md-4 col-xs-6">
-					<div class="shop">
-						<div class="shop-img">
-							<img src="./img/shop02.png" alt="">
-						</div>
-						<div class="shop-body">
-							<h3>Others<br>Collection</h3>
-							<a href="#" class="cta-btn">Shop now <i class="fa fa-arrow-circle-right"></i></a>
-						</div>
-					</div>
-				</div>
-				<!-- /shop -->
 			</div>
 			<!-- /row -->
 		</div>
 		<!-- /container -->
 	</div>
-	<!-- /SECTION -->
+	<!-- /BREADCRUMB -->
 
 	<!-- SECTION -->
 	<div class="section">
@@ -230,240 +233,133 @@ while ($row = mysqli_fetch_array($query)) {
 		<div class="container">
 			<!-- row -->
 			<div class="row">
+				<!-- ASIDE -->
+				<div id="aside" class="col-md-3">
+					<!-- aside Widget -->
+					<div class="aside">
+						<h3 class="aside-title">Categories</h3>
+						<?php
+						require "../includes/db_connect.php";
 
-				<!-- section title -->
-				<div class="col-md-12">
-					<div class="section-title">
-						<h3 class="title">New Products</h3>
-						<div class="section-nav">
-							<ul class="section-tab-nav tab-nav">
-								<li class="active"><a data-toggle="tab" href="#tab1">Laptops</a></li>
-								<li><a data-toggle="tab" href="#tab1">Accessories</a></li>
-								<li><a data-toggle="tab" href="#tab1">Others</a></li>
-							</ul>
-						</div>
-					</div>
-				</div>
-				<!-- /section title -->
+						$category_sql = "SELECT * FROM categories";
+						$category_query = mysqli_query($connect, $category_sql);
 
-				<!-- Products tab & slick -->
-				<div class="col-md-12">
-					<div class="row">
-						<div class="products-tabs">
-							<!-- tab -->
-							<div id="tab1" class="tab-pane active">
-								<div class="products-slick" data-nav="#slick-nav-1">
-
-									<?php
-									require "../includes/db_connect.php";
-
-									$product_carousel_sql = "SELECT * FROM product_carousels";
-									$product_carousel_query = mysqli_query($connect, $product_carousel_sql);
-
-									while ($data = mysqli_fetch_assoc($product_carousel_query)) {
-									?>
-										<form method="POST" action="detail_product.php">
-											<div class="product">
-												<div class="product-img">
-													<img src="../media/laptop-photos/<?= $data['photo'] ?>" alt="">
-													<div class="product-label">
-														<!-- <span class="sale">-30%</span> -->
-														<span class="new">NEW</span>
-													</div>
-												</div>
-												<div class="product-body">
-													<p class="product-category"><?= $data['category'] ?></p>
-													<h3 class="product-name"><a href="#"><?= $data['product_name'] ?></a></h3>
-													<h4 class="product-price">Rp <?= $data['dealer_prices'] ?>,-</h4>
-													<div class="product-rating">
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-														<i class="fa fa-star"></i>
-													</div>
-													<div class="product-btns">
-														<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
-														<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
-														<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
-													</div>
-												</div>
-												<div class="add-to-cart">
-													<input hidden name='product_id' type='text' value="<?= $data['product_id'] ?>">
-													<button class="add-to-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i>Detail!</button>
-												</div>
-											</div>
-										</form>
-									<?php } ?>
-
+						while ($data = mysqli_fetch_assoc($category_query)) {
+						?>
+							<div class="checkbox-filter">
+								<div class="input-checkbox">
+									<form action="categorized_product.php" method="POST">
+										<span>
+											<button style="all: unset;" type="submit"><?= $data['category'] ?></button>
+										</span>
+										<small>
+											(<?= $data['category_id'] ?>)
+										</small>
+										<input hidden name='category' type='text' value="<?= $data['category'] ?>">
+									</form>
 								</div>
-								<div id="slick-nav-1" class="products-slick-nav"></div>
 							</div>
-							<!-- /tab -->
-						</div>
+						<?php } ?>
 					</div>
-				</div>
-				<!-- Products tab & slick -->
-			</div>
-			<!-- /row -->
-		</div>
-		<!-- /container -->
-	</div>
-	<!-- /SECTION -->
+					<!-- /aside Widget -->
 
-	<!-- HOT DEAL SECTION -->
-	<div id="hot-deal" class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<div class="col-md-12">
-					<div class="hot-deal">
-						<ul class="hot-deal-countdown">
-							<li>
-								<div>
-									<h3>00</h3>
-									<span>Days</span>
+					<!-- aside Widget -->
+					<div class="aside">
+						<h3 class="aside-title">Top selling</h3>
+						<?php
+						require "../includes/db_connect.php";
+
+						$popular_sql = "SELECT * FROM product_by_popularity LIMIT 3";
+						$popular_query = mysqli_query($connect, $popular_sql);
+
+						while ($data = mysqli_fetch_assoc($popular_query)) {
+						?>
+							<div class="product-widget">
+								<div class="product-img">
+									<img src="../media/laptop-photos/<?= $data['photo'] ?>" alt="">
 								</div>
-							</li>
-							<li>
-								<div>
-									<h3>00</h3>
-									<span>Hours</span>
+								<div class="product-body">
+									<p class="product-category"><i><b><?= $data['category'] ?></b></i> - Sold: <b><?= $data['sold_products'] ?></p>
+									<h3 class="product-name"><?= $data['product_name'] ?></h3>
+									<h4 class="product-price">Rp<?= $data['dealer_prices'] ?>,-</h4>
 								</div>
-							</li>
-							<li>
-								<div>
-									<h3>00</h3>
-									<span>Mins</span>
-								</div>
-							</li>
-							<li>
-								<div>
-									<h3>00</h3>
-									<span>Secs</span>
-								</div>
-							</li>
+							</div>
+						<?php } ?>
+					</div>
+					<!-- /aside Widget -->
+				</div>
+				<!-- /ASIDE -->
+
+				<!-- STORE -->
+				<!-- store products -->
+				<div id="store" class="col-md-9">
+					<!-- product -->
+					<div class="row">
+					<?php
+					require "../includes/db_connect.php";
+
+					$product_carousel_sql = "SELECT * FROM product_carousels";
+					$product_carousel_query = mysqli_query($connect, $product_carousel_sql);
+
+					while ($data = mysqli_fetch_assoc($product_carousel_query)) {
+					?>
+							<div class="col-md-4 col-xs-3">
+								<form method="POST" action="detail_product.php">
+									<div class="product">
+										<div class="product-img">
+											<img src="../media/laptop-photos/<?= $data['photo'] ?>" alt="">
+											<div class="product-label">
+												<!-- <span class="sale">-30%</span> -->
+												<span class="new">NEW</span>
+											</div>
+										</div>
+										<div class="product-body">
+											<p class="product-category"><?= $data['category'] ?></p>
+											<h3 class="product-name"><a href="#"><?= $data['product_name'] ?></a></h3>
+											<h4 class="product-price">Rp <?= $data['dealer_prices'] ?>,-</h4>
+											<div class="product-rating">
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+												<i class="fa fa-star"></i>
+											</div>
+											<div class="product-btns">
+												<button class="add-to-wishlist"><i class="fa fa-heart-o"></i><span class="tooltipp">add to wishlist</span></button>
+												<button class="add-to-compare"><i class="fa fa-exchange"></i><span class="tooltipp">add to compare</span></button>
+												<button class="quick-view"><i class="fa fa-eye"></i><span class="tooltipp">quick view</span></button>
+											</div>
+										</div>
+										<div class="add-to-cart">
+											<input hidden name='product_id' type='text' value="<?= $data['product_id'] ?>">
+											<button class="add-to-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i>Detail!</button>
+										</div>
+									</div>
+								</form>
+								<div class="clearfix visible-sm visible-xs"></div>
+							</div> 
+							<?php } ?>
+						</div>
+					<!-- /store products -->
+
+					<!-- store bottom filter -->
+					<div class="store-filter clearfix">
+						<span class="store-qty">Showing 20-100 products</span>
+						<ul class="store-pagination">
+							<li class="active">1</li>
+							<li><a href="#">2</a></li>
+							<li><a href="#">3</a></li>
+							<li><a href="#">4</a></li>
+							<li><a href="#"><i class="fa fa-angle-right"></i></a></li>
 						</ul>
-						<h2 class="text-uppercase">hot deal this week</h2>
-						<p>Selebrasi Presentasi Tubes 🥳</p>
-						<a class="primary-btn cta-btn" href="#">Shop now</a>
 					</div>
+					<!-- /store bottom filter -->
 				</div>
+				<!-- /STORE -->
 			</div>
 			<!-- /row -->
 		</div>
 		<!-- /container -->
-	</div>
-	<!-- /HOT DEAL SECTION -->
-
-	<!-- SECTION -->
-	<div class="section">
-		<!-- container -->
-		<div class="container">
-			<!-- row -->
-			<div class="row">
-				<div class="col-md-4 col-xs-6">
-					<div class="section-title">
-						<h4 class="title">Top selling YOGA</h4>
-						<div class="section-nav">
-							<div id="slick-nav-3" class="products-slick-nav"></div>
-						</div>
-					</div>
-					<div class="products-widget-slick" data-nav="#slick-nav-3">
-						<div>
-							<?php
-							require "../includes/db_connect.php";
-
-							$thinkpad_sql = "SELECT * FROM product_by_popularity WHERE category = 'YOGA' LIMIT 3";
-							$thinkpad_query = mysqli_query($connect, $thinkpad_sql);
-
-							while ($data = mysqli_fetch_assoc($thinkpad_query)) {
-							?>
-								<div class="product-widget">
-									<div class="product-img">
-										<img src="../media/laptop-photos/<?= $data['photo'] ?>" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Sold: <b><?= $data['sold_products'] ?></b> </p>
-										<h3 class="product-name"><?= $data['product_name'] ?></h3>
-										<h4 class="product-price">Rp<?= $data['dealer_prices'] ?>,- <del class="product-old-price">Rp <?= $data['user_prices'] ?>,-</del></h4>
-									</div>
-								</div>
-							<?php } ?>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 col-xs-6">
-					<div class="section-title">
-						<h4 class="title">Top selling ThinkPad</h4>
-						<div class="section-nav">
-							<div id="slick-nav-4" class="products-slick-nav"></div>
-						</div>
-					</div>
-					<div class="products-widget-slick" data-nav="#slick-nav-4">
-						<div>
-							<?php
-							require "../includes/db_connect.php";
-
-							$thinkpad_sql = "SELECT * FROM product_by_popularity WHERE category = 'ThinkPad' LIMIT 3";
-							$thinkpad_query = mysqli_query($connect, $thinkpad_sql);
-
-							while ($data = mysqli_fetch_assoc($thinkpad_query)) {
-							?>
-								<div class="product-widget">
-									<div class="product-img">
-										<img src="../media/laptop-photos/<?= $data['photo'] ?>" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Sold: <b><?= $data['sold_products'] ?></b> </p>
-										<h3 class="product-name"><?= $data['product_name'] ?></h3>
-										<h4 class="product-price">Rp<?= $data['dealer_prices'] ?>,- <del class="product-old-price">Rp <?= $data['user_prices'] ?>,-</del></h4>
-									</div>
-								</div>
-							<?php } ?>
-						</div>
-					</div>
-				</div>
-				<div class="col-md-4 col-xs-6">
-					<div class="section-title">
-						<h4 class="title">Top selling IdeaPad</h4>
-						<div class="section-nav">
-							<div id="slick-nav-4" class="products-slick-nav"></div>
-						</div>
-					</div>
-					<div class="products-widget-slick" data-nav="#slick-nav-4">
-						<div>
-							<?php
-							require "../includes/db_connect.php";
-
-							$thinkpad_sql = "SELECT * FROM product_by_popularity WHERE category = 'IdeaPad' LIMIT 3";
-							$thinkpad_query = mysqli_query($connect, $thinkpad_sql);
-
-							while ($data = mysqli_fetch_assoc($thinkpad_query)) {
-							?>
-								<div class="product-widget">
-									<div class="product-img">
-										<img src="../media/laptop-photos/<?= $data['photo'] ?>" alt="">
-									</div>
-									<div class="product-body">
-										<p class="product-category">Sold: <b><?= $data['sold_products'] ?></b> </p>
-										<h3 class="product-name"><?= $data['product_name'] ?></h3>
-										<h4 class="product-price">Rp<?= $data['dealer_prices'] ?>,- <del class="product-old-price">Rp <?= $data['user_prices'] ?>,-</del></h4>
-									</div>
-								</div>
-							<?php } ?>
-						</div>
-					</div>
-				</div>
-			</div>
-
-			<div class="clearfix visible-sm visible-xs"></div>
-
-		</div>
-		<!-- /row -->
-	</div>
-	<!-- /container -->
 	</div>
 	<!-- /SECTION -->
 

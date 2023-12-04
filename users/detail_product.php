@@ -248,8 +248,8 @@ while ($row = mysqli_fetch_array($query)) {
 			<div class="row">
 				<div class="col-md-12">
 					<ul class="breadcrumb-tree">
-						<li><a href="#">Home</a></li>
-						<li><a href="#">Products</a></li>
+						<li><a href="index.php">Home</a></li>
+						<li><a href="products.php">Products</a></li>
 						<li class="active"><?= $product_name ?></li>
 					</ul>
 				</div>
