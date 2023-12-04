@@ -48,9 +48,12 @@ CREATE VIEW confirmed_order_delivery AS
 -- View untuk produk berdasarkan urutan kelarisan--> 4
 CREATE VIEW product_by_popularity AS
     SELECT
-        product_id,
-        product_name,
+        p.product_id,
+        p.product_name,
         c.category,
+        p.dealer_prices,
+        p.user_prices,
+        p.photo,
         (SELECT
                 COUNT(product_id)
             FROM
@@ -208,4 +211,25 @@ CREATE VIEW all_products AS
         products p
             JOIN categories c ON p.category_id = c.category_id;
 
+-- View untuk carousel product pada laman user --> 16
+CREATE VIEW product_carousels AS 
+    SELECT
+        p.product_id,
+        p.product_name,
+        c.category,
+        p.dealer_prices,
+        p.photo
+    FROM
+        products p
+            JOIN categories c ON p.category_id = c.category_id;
+
+-- View untuk mengambil data lengkap dari sebuah produk untuk detailnya.
+CREATE VIEW all_product_data AS 
+    SELECT
+    p.*,
+    c.category,
+    (SELECT COUNT(product_id) FROM orders WHERE product_id = p.product_id) AS sold_products
+    FROM
+        products p 
+            JOIN categories c ON p.category_id = c.category_id;
 
