@@ -4,7 +4,7 @@ require "../includes/db_connect.php";
 $id = $_SESSION['id'];
 $product_id = $_POST['product_id'];
 
-$sql = "SELECT * FROM users WHERE user_id = '$id'";
+$sql = "SELECT * FROM customers_account WHERE user_id = '$id'";
 $query = mysqli_query($connect, $sql);
 
 if (!$query) {
@@ -14,12 +14,18 @@ if (!$query) {
 while ($row = mysqli_fetch_array($query)) {
 	$name = $row['name'];
 	$email = $row['email'];
+	$user_id = $row['user_id'];
+	$phone_number = $row['phone_number'];
+	$address = $row['address'];
+	$last_purchase = $row['last_purchase'];
 }
 
 
-function generateUniqueID($idLength) {
+function generateUniqueID()
+{
 	$characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
 	$uniqueID = '';
+	$idLength = 10;
 
 	for ($i = 0; $i < $idLength; $i++) {
 		$uniqueID .= $characters[rand(0, strlen($characters) - 1)];
@@ -28,7 +34,19 @@ function generateUniqueID($idLength) {
 	return $uniqueID;
 }
 
+$sql = "SELECT * FROM all_product_data WHERE product_id = '$product_id'";
+$query = mysqli_query($connect, $sql);
 
+if (!$query) {
+	die("Query gagal" . mysqli_error($connect));
+}
+
+while ($row = mysqli_fetch_array($query)) {
+	$product_name = $row['product_name'];
+	$photo = $row['photo'];
+	$dealer_prices = $row['dealer_prices'];
+	$description = $row['description'];
+}
 ?>
 
 <!DOCTYPE html>
@@ -247,172 +265,161 @@ function generateUniqueID($idLength) {
 		<div class="container">
 			<!-- row -->
 			<div class="row">
+				<form method="POST" enctype="multipart/form-data">
+					<div class="col-md-7">
+						<!-- Billing Details -->
+						<div class="billing-details">
+							<div class="section-title">
+								<h3 class="title">Billing Profile</h3>
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="address" placeholder="Address" value="<?= $address ?>">
+							</div>
+							<div class="form-group">
+								<input class="input" type="text" name="phone_number" placeholder="Telephone" value="<?= $phone_number ?>">
+							</div>
+							<div class="form-group">
+								<label for="order_proof" style="padding: 10px 15px; font-size: 15px; color: #333; border-radius: 5px; cursor: pointer; transition: background-color 0.3s ease;">
+									<span>Upload Proof</span>
+								</label>
+								<input id="order_proof" class="input" type="file" name="image" accept="image/*" style="display: none;">
+							</div>
 
-				<div class="col-md-7">
-					<!-- Billing Details -->
-					<div class="billing-details">
-						<div class="section-title">
-							<h3 class="title">Billing address</h3>
+
 						</div>
-						<div class="form-group">
-							<input class="input" type="text" name="first-name" placeholder="First Name">
-						</div>
-						<div class="form-group">
-							<input class="input" type="text" name="last-name" placeholder="Last Name">
-						</div>
-						<div class="form-group">
-							<input class="input" type="email" name="email" placeholder="Email">
-						</div>
-						<div class="form-group">
-							<input class="input" type="text" name="address" placeholder="Address">
-						</div>
-						<div class="form-group">
-							<input class="input" type="text" name="city" placeholder="City">
-						</div>
-						<div class="form-group">
-							<input class="input" type="text" name="country" placeholder="Country">
-						</div>
-						<div class="form-group">
-							<input class="input" type="text" name="zip-code" placeholder="ZIP Code">
-						</div>
-						<div class="form-group">
-							<input class="input" type="tel" name="tel" placeholder="Telephone">
-						</div>
-						<div class="form-group">
+						<!-- /Billing Details -->
+						<!-- Shiping Details -->
+						<div class="shiping-details">
+							<div class="section-title">
+								<h3 class="title">Messages</h3>
+							</div>
 							<div class="input-checkbox">
-								<input type="checkbox" id="create-account">
-								<label for="create-account">
+								<input type="checkbox" id="shiping-address">
+								<label for="shiping-address">
 									<span></span>
-									Create Account?
+									Got any messages?
+								</label>
+							</div>
+						</div>
+						<!-- /Shiping Details -->
+
+						<!-- Order notes -->
+						<div class="order-notes">
+							<textarea class="input" placeholder="Order Notes" name="messages"></textarea>
+						</div>
+						<!-- /Order notes -->
+					</div>
+
+					<!-- Order Details -->
+					<div class="col-md-5 order-details">
+						<div class="section-title text-center">
+							<h3 class="title">Your Order</h3>
+						</div>
+						<div class="order-summary">
+							<div class="order-col">
+								<div><strong>PRODUCT</strong></div>
+								<div><strong>TOTAL</strong></div>
+							</div>
+							<div class="order-products">
+								<div class="order-col">
+									<div>1x <?= $product_name ?></div>
+									<div>Rp <?= $dealer_prices ?>,-</div>
+								</div>
+							</div>
+							<div class="order-col">
+								<div>Shiping</div>
+								<div><strong>FREE</strong></div>
+							</div>
+							<div class="order-col">
+								<div><strong>TOTAL</strong></div>
+								<div><strong class="order-total">Rp <?= $dealer_prices ?>,-</strong></div>
+							</div>
+						</div>
+						<div class="payment-method">
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-1">
+								<label for="payment-1">
+									<span></span>
+									Direct Bank Transfer
 								</label>
 								<div class="caption">
-									<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt.</p>
-									<input class="input" type="password" name="password" placeholder="Enter Your Password">
+									<p>Please upload your proof of transfers in the form asides</p>
 								</div>
 							</div>
-						</div>
-					</div>
-					<!-- /Billing Details -->
-
-					<!-- Shiping Details -->
-					<div class="shiping-details">
-						<div class="section-title">
-							<h3 class="title">Shiping address</h3>
+							<div class="input-radio">
+								<input type="radio" name="payment" id="payment-2">
+								<label for="payment-2">
+									<span></span>
+									Cheque Payment
+								</label>
+								<div class="caption">
+									<p>Please upload your proof of cheque in the form asides.</p>
+								</div>
+							</div>
 						</div>
 						<div class="input-checkbox">
-							<input type="checkbox" id="shiping-address">
-							<label for="shiping-address">
+							<input type="checkbox" id="terms">
+							<label for="terms">
 								<span></span>
-								Ship to a diffrent address?
+								I've read and accept the <a href="#">terms & conditions</a>
 							</label>
-							<div class="caption">
-								<div class="form-group">
-									<input class="input" type="text" name="first-name" placeholder="First Name">
-								</div>
-								<div class="form-group">
-									<input class="input" type="text" name="last-name" placeholder="Last Name">
-								</div>
-								<div class="form-group">
-									<input class="input" type="email" name="email" placeholder="Email">
-								</div>
-								<div class="form-group">
-									<input class="input" type="text" name="address" placeholder="Address">
-								</div>
-								<div class="form-group">
-									<input class="input" type="text" name="city" placeholder="City">
-								</div>
-								<div class="form-group">
-									<input class="input" type="text" name="country" placeholder="Country">
-								</div>
-								<div class="form-group">
-									<input class="input" type="text" name="zip-code" placeholder="ZIP Code">
-								</div>
-								<div class="form-group">
-									<input class="input" type="tel" name="tel" placeholder="Telephone">
-								</div>
-							</div>
 						</div>
+						<input hidden name='product_id' type='text' value="<?= $product_id ?>">
+						<button class="primary-btn order-submit" type="submit" name="order-button">Place Order!</button>
 					</div>
-					<!-- /Shiping Details -->
+					<!-- /Order Details -->
+				</form>
+				<?php
+				require "../includes/db_connect.php";
 
-					<!-- Order notes -->
-					<div class="order-notes">
-						<textarea class="input" placeholder="Order Notes"></textarea>
-					</div>
-					<!-- /Order notes -->
-				</div>
 
-				<!-- Order Details -->
-				<div class="col-md-5 order-details">
-					<div class="section-title text-center">
-						<h3 class="title">Your Order</h3>
-					</div>
-					<div class="order-summary">
-						<div class="order-col">
-							<div><strong>PRODUCT</strong></div>
-							<div><strong>TOTAL</strong></div>
-						</div>
-						<div class="order-products">
-							<div class="order-col">
-								<div>1x Product Name Goes Here</div>
-								<div>$980.00</div>
-							</div>
-							<div class="order-col">
-								<div>2x Product Name Goes Here</div>
-								<div>$980.00</div>
-							</div>
-						</div>
-						<div class="order-col">
-							<div>Shiping</div>
-							<div><strong>FREE</strong></div>
-						</div>
-						<div class="order-col">
-							<div><strong>TOTAL</strong></div>
-							<div><strong class="order-total">$2940.00</strong></div>
-						</div>
-					</div>
-					<div class="payment-method">
-						<div class="input-radio">
-							<input type="radio" name="payment" id="payment-1">
-							<label for="payment-1">
-								<span></span>
-								Direct Bank Transfer
-							</label>
-							<div class="caption">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-							</div>
-						</div>
-						<div class="input-radio">
-							<input type="radio" name="payment" id="payment-2">
-							<label for="payment-2">
-								<span></span>
-								Cheque Payment
-							</label>
-							<div class="caption">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-							</div>
-						</div>
-						<div class="input-radio">
-							<input type="radio" name="payment" id="payment-3">
-							<label for="payment-3">
-								<span></span>
-								Paypal System
-							</label>
-							<div class="caption">
-								<p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-							</div>
-						</div>
-					</div>
-					<div class="input-checkbox">
-						<input type="checkbox" id="terms">
-						<label for="terms">
-							<span></span>
-							I've read and accept the <a href="#">terms & conditions</a>
-						</label>
-					</div>
-					<a href="#" class="primary-btn order-submit">Place order</a>
-				</div>
-				<!-- /Order Details -->
+				$newFileName = "";
+
+				if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_FILES["image"]["name"])) {
+					$uploadDir = 'C:/laragon/www/E-Commerce-Dayamega/media/structs/'; // Directory where uploaded images will be saved
+					$randomStr = uniqid(); // Generate a random string
+					$date = date('Y-m-d'); // Get current date
+				
+					// Get the file information
+					$fileName = basename($_FILES["image"]["name"]);
+					$fileTmp = $_FILES["image"]["tmp_name"];
+				
+					// Extract file extension
+					$fileExtension = pathinfo($fileName, PATHINFO_EXTENSION);
+				
+					// Create a unique filename using current date, random string, and file extension
+					$newFileName = $date . '-' . $randomStr . '.' . $fileExtension;
+				
+					// Move the uploaded file to the specified directory with the new filename
+					$destination = $uploadDir . $newFileName;
+					if (move_uploaded_file($fileTmp, $destination)) {
+						echo "";
+					} else {
+						echo "Error uploading file.";
+					}
+				}
+				
+				if (isset($_POST['order-button'])) {
+					$order_id = generateUniqueID();
+					$product_id = $_POST['product_id'];
+					$address = $_POST['address'];
+					$phone_number = $_POST['phone_number'];
+				
+					$courier_sql = "SELECT getRandomCourierUserId() AS courier";
+					$courier_query = mysqli_query($connect, $courier_sql);
+					$courier = mysqli_fetch_assoc($courier_query);
+					$courier = $courier['courier'];
+				
+					$status = 'Unconfirmed';
+					$message = $_POST['messages'];
+				
+					$order_query = "INSERT INTO orders VALUES('$order_id', '$product_id', '$id', '$dealer_prices', '$address', '$phone_number', NOW(), '$courier', '$status', '$message', '$newFileName')";
+					$order_sql = mysqli_query($connect, $order_query);
+				
+					echo '<script>window.location.href = "products.php";</script>';
+				}
+				
+				?>
 			</div>
 			<!-- /row -->
 		</div>

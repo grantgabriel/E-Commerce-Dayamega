@@ -315,7 +315,7 @@ while ($row = mysqli_fetch_array($query)) {
 						<p><?= $description ?></p>
 						<div class="add-to-cart">
 							<form action="checkout.php" method="POST">
-								<input hidden name='product_id' type='text' value="<?= $data['product_id'] ?>">
+								<input hidden name='product_id' type='text' value="<?= $product_id ?>">
 								<button class="add-to-cart-btn" type="submit"><i class="fa fa-shopping-cart"></i> add to cart</button>
 							</form>
 						</div>
