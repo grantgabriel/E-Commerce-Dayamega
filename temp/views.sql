@@ -15,7 +15,7 @@ CREATE VIEW stock_report AS
     FROM
         products p;
 
--- View untuk laporan bug yang belum terselesaikan--> 2
+-- View untuk laporan bug yang belum terselesaikan --> 2
 CREATE VIEW unresolved_bug_report AS
     SELECT
         report_id,
@@ -239,6 +239,7 @@ CREATE VIEW all_orders_data AS
         o.*,
         p.product_name,
         p.photo,
+        p.dealer_prices,
         u.name AS courier_name
     FROM
         orders o 

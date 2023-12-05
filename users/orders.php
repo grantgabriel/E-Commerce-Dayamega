@@ -214,7 +214,7 @@ while ($row = mysqli_fetch_array($query)) {
 									<p style="color: #ffffff;">Order Date: <?= $data['order_date'] ?></p>
 									<p style="color: #ffffff;">Courier Name: <?= $data['courier_name'] ?></p>
 									<p style="color: #ffffff;">Delivery Address: <?= $data['delivery_address'] ?></p>
-									<p style="color: #ffffff;">Total: <?= $data['product_name'] ?></p>
+									<p style="color: #ffffff;">Total: Rp <?= $data['dealer_prices'] ?>,-</p>
 									<p style="color: #ffffff;">Message: <?= $data['message'] ?></p>
 									<p style="color: #ffffff;">Status: <?= $data['status'] ?></p>
 								</div>
