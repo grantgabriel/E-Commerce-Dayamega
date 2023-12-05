@@ -238,6 +238,7 @@ CREATE VIEW all_orders_data AS
     SELECT
         o.*,
         p.product_name,
+        p.photo,
         u.name AS courier_name
     FROM
         orders o 

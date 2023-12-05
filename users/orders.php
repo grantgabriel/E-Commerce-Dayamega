@@ -198,25 +198,33 @@ while ($row = mysqli_fetch_array($query)) {
 			<!-- row -->
 			<div class="row">
 				<?php
-					require "../includes/db_connect.php";
+				require "../includes/db_connect.php";
 
-					$orders_sql = "SELECT * FROM all_orders_data WHERE user_id = '$id' ORDER BY order_date DESC";
-					$orders_query = mysqli_query($connect, $orders_sql);
+				$orders_sql = "SELECT * FROM all_orders_data WHERE user_id = '$id' ORDER BY order_date DESC";
+				$orders_query = mysqli_query($connect, $orders_sql);
 
-					while ($data = mysqli_fetch_assoc($orders_query)) {
+				while ($data = mysqli_fetch_assoc($orders_query)) {
 				?>
-				<div style="display: flex; align-items: center; justify-content: center;">
-					<div style="width: 80%; background-color: #1e1f29; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 20px;">
-						<h4 style="text-align: center; color: #ffffff;">Orders #<?= $data['order_id'] ?></h4>
-						<p style="color: #ffffff;">Product Name:      <?= $data['product_name'] ?></p>
-						<p style="color: #ffffff;">Order Date:        <?= $data['order_date'] ?></p>
-						<p style="color: #ffffff;">Courier Name:      <?= $data['courier_name'] ?></p>
-						<p style="color: #ffffff;">Delivery Address:  <?= $data['delivery_address'] ?></p>
-						<p style="color: #ffffff;">Total:             <?= $data['product_name'] ?></p>
-						<p style="color: #ffffff;">Message:           <?= $data['message'] ?></p>
-						<p style="color: #ffffff;">Status:            <?= $data['status'] ?></p>
+					<div style="display: flex; align-items: flex-start; justify-content: center;">
+						<div style="width: 80%; background-color: #1e1f29; border-radius: 8px; padding: 20px; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); margin: 20px;" class="container">
+							<h4 style="text-align: center; color: #ffffff;">Orders <?= $data['order_id'] ?></h4>
+							<div class="card-container" style="display: flex; width: 100%;">
+								<div class="details-container" style="width: 70%; flex: 1;">
+									<p style="color: #ffffff;">Product Name: <?= $data['product_name'] ?></p>
+									<p style="color: #ffffff;">Order Date: <?= $data['order_date'] ?></p>
+									<p style="color: #ffffff;">Courier Name: <?= $data['courier_name'] ?></p>
+									<p style="color: #ffffff;">Delivery Address: <?= $data['delivery_address'] ?></p>
+									<p style="color: #ffffff;">Total: <?= $data['product_name'] ?></p>
+									<p style="color: #ffffff;">Message: <?= $data['message'] ?></p>
+									<p style="color: #ffffff;">Status: <?= $data['status'] ?></p>
+								</div>
+								<div class="laptop-images" style="width: 30%; flex: 1; display: flex; align-items: center; justify-content: right;">
+									<!-- Image -->
+									<img src="../media/laptop-photos/<?= $data['photo'] ?>" alt="" style="width: 200px;">
+								</div>
+							</div>
+						</div>
 					</div>
-				</div>
 				<?php } ?>
 			</div>
 			<!-- /row -->
