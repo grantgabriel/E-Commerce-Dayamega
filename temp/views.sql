@@ -245,3 +245,23 @@ CREATE VIEW all_orders_data AS
         orders o 
             JOIN products p ON o.product_id = p.product_id
             JOIN users u ON o.courier_id = u.user_id;
+
+-- View untuk menampilkan laporan penjualan sales --> 19
+CREATE VIEW sales_report AS 
+    SELECT
+        order_id,
+        order_date,
+        u.name AS customer_name,
+        p.product_id,
+        p.product_name,
+        delivery_address,
+        status,
+        total
+    FROM
+        orders o 
+            JOIN products p ON o.product_id = p.product_id
+            JOIN users u ON o.user_id = u.user_id
+    WHERE
+        status IN ('Received')
+    ORDER BY order_date DESC;
+

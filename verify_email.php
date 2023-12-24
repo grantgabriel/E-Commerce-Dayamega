@@ -38,7 +38,7 @@ if (isset($_POST['otp-button'])) {
     header("Location:index.php");
   } else {
     header("Location:sign-up.php");
-    echo "<script>console.log('GAGAL COK MASUK')</script>";
+    echo "<script>console.err('GAGAL CUY MASUK')</script>";
   }
 }
 
@@ -54,7 +54,7 @@ $connect->close();
   <link rel="apple-touch-icon" sizes="76x76" href="./assets/img/apple-icon.png">
   <link rel="icon" type="image/png" href="./assets/img/dayamega.jpeg">
   <title>
-    Dayamega's Sign Up
+    Dayamega's OTP
   </title>
   <!--     Fonts and icons     -->
   <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
@@ -76,7 +76,7 @@ $connect->close();
   <nav class="navbar navbar-expand-lg position-absolute top-0 z-index-3 w-100 shadow-none my-3 navbar-transparent mt-4">
     <div class="container">
       <a class="navbar-brand font-weight-bolder ms-lg-0 ms-3 text-white" href="">
-        Dayamega's Sign Up
+        Dayamega's OTP
       </a>
       <button class="navbar-toggler shadow-none ms-2" type="button" data-bs-toggle="collapse" data-bs-target="#navigation" aria-controls="navigation" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon mt-2">
@@ -184,7 +184,7 @@ $connect->close();
                 </div>
                 <div class="mt-2 position-relative text-center">
                   <p class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3">
-                    insert OTP
+                    Insert OTP
                   </p>
                 </div>
               </div>

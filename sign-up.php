@@ -1,43 +1,41 @@
 <?php
-require "includes/db_connect.php";
+  require "includes/db_connect.php";
 
-function generateUniqueID()
-{
-  $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  $uniqueID = '';
-  $idLength = 6;
+  function generateUniqueID() {
+    $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+    $uniqueID = '';
+    $idLength = 6;
 
-  for ($i = 0; $i < $idLength; $i++) {
-    $uniqueID .= $characters[rand(0, strlen($characters) - 1)];
+    for ($i = 0; $i < $idLength; $i++) {
+      $uniqueID .= $characters[rand(0, strlen($characters) - 1)];
+    }
+
+    return $uniqueID;
   }
 
-  return $uniqueID;
-}
+  if(isset($_POST['sign-up-button'])) {
+    $_SESSION['otp'] = generateUniqueID();
+    $_SESSION['name'] = $_POST['name'];
+    $_SESSION['email'] = $_POST['email'];
+    $_SESSION['phone_number'] = $_POST['phone_number'];
+    $_SESSION['password'] = md5($_POST['password']);
+    $_SESSION['address'] = $_POST['address'];
 
-if (isset($_POST['sign-up-button'])) {
-  $_SESSION['otp'] = generateUniqueID();
-  $_SESSION['name'] = $_POST['name'];
-  $_SESSION['email'] = $_POST['email'];
-  $_SESSION['phone_number'] = $_POST['phone_number'];
-  $_SESSION['password'] = md5($_POST['password']);
-  $_SESSION['address'] = $_POST['address'];
-
-  $to = $_POST['email'];
-  $subject = "Mail Verification";
-  $message = "Your OTP code is " . $_SESSION['otp'] . " ! DO NOT SHARE THIS OTP TO OTHERS!";
-  $headers = "From: dayamegaexample@gmail.com\r\n";
-
-  if (mail($to, $subject, $message, $headers)) {
-    header("Location: verify_email.php");
-    exit();
-  } else {
-    header("Location: index.php");
-    exit();
+    $to = $_POST['email'];
+    $subject = "Mail Verification";
+    $message = "Your OTP code is " . $_SESSION['otp'] . " ! DO NOT SHARE THIS OTP TO OTHERS!";
+    $headers = "From: dayamegaexample@gmail.com\r\n";
+    
+    if (mail($to, $subject, $message, $headers)) {
+      header("Location: verify_email.php");
+      exit();
+    } else {
+      header("Location: index.php");
+      exit();
+    }
   }
-}
-
-$connect->close();
-?>
+  $connect->close();
+?>  
 
 <!DOCTYPE html>
 <html lang="en">
@@ -107,7 +105,7 @@ $connect->close();
           </li>
         </ul>
         <li class="nav-item d-flex align-items-center">
-          <a class="btn btn-round btn-sm mb-0 btn-outline-white me-2" href="index.php">Sign - In</a>
+          <a class="btn btn-round btn-sm mb-0 btn-outline-white me-2"  href="index.php">Sign - In</a>
         </li>
         <ul class="navbar-nav d-lg-block d-none">
           <li class="nav-item">
@@ -183,12 +181,12 @@ $connect->close();
                 </div>
               </div>
               <div class="card-body">
-                <form role="form text-left" method="POST" name="sign-up-form">
+                <form role="form text-left" method="POST" name="sign-up-form" action="#">
                   <div class="mb-3">
                     <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="email-addon" name="name" id="name">
                   </div>
                   <div class="mb-3">
-                    <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="email" id="email">
+                    <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="email" id="email" mailto="">
                   </div>
                   <div class="mb-3">
                     <input type="text" class="form-control" placeholder="Phone-Number" aria-label="Phone-Number" aria-describedby="email-addon" name="phone_number" id="phone_number">
