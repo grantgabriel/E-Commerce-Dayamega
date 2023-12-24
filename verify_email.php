@@ -1,38 +1,44 @@
 <?php
 require "includes/db_connect.php";
 
-function generateUniqueID()
-{
-  $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
-  $uniqueID = '';
-  $idLength = 6;
+$otp = $_SESSION['otp'];
 
-  for ($i = 0; $i < $idLength; $i++) {
-    $uniqueID .= $characters[rand(0, strlen($characters) - 1)];
-  }
+if (isset($_POST['otp-button'])) {
+  if ($otp == $_POST['otp_input']) {
+    function generateUniqueID()
+    {
+      $characters = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ';
+      $uniqueID = '';
+      $idLength = 9;
 
-  return $uniqueID;
-}
+      for ($i = 0; $i < $idLength; $i++) {
+        $uniqueID .= $characters[rand(0, strlen($characters) - 1)];
+      }
 
-if (isset($_POST['sign-up-button'])) {
-  $_SESSION['otp'] = generateUniqueID();
-  $_SESSION['name'] = $_POST['name'];
-  $_SESSION['email'] = $_POST['email'];
-  $_SESSION['phone_number'] = $_POST['phone_number'];
-  $_SESSION['password'] = md5($_POST['password']);
-  $_SESSION['address'] = $_POST['address'];
+      return $uniqueID;
+    }
 
-  $to = $_POST['email'];
-  $subject = "Mail Verification";
-  $message = "Your OTP code is " . $_SESSION['otp'] . " ! DO NOT SHARE THIS OTP TO OTHERS!";
-  $headers = "From: dayamegaexample@gmail.com\r\n";
+    $user_id = generateUniqueID();
+    $level = 'Users';
+    $created_at = date("Y-m-d H:i:s");
+    $name = $_SESSION['name'];
+    $email = $_SESSION['email'];
+    $phone_number = $_SESSION['phone_number'];
+    $password = md5($_SESSION['password']);
+    $address = $_SESSION['address'];
 
-  if (mail($to, $subject, $message, $headers)) {
-    header("Location: verify_email.php");
-    exit();
+
+    $users_sql = "CALL appendCustomers('$user_id', '$name', '$email', '$phone_number', '$password', '$address')";
+    $users_query = mysqli_query($connect, $users_sql);
+
+    if (!$users_query) {
+      die("Query gagal" . mysqli_error($connect));
+    }
+
+    header("Location:index.php");
   } else {
-    header("Location: index.php");
-    exit();
+    header("Location:sign-up.php");
+    echo "<script>console.log('GAGAL COK MASUK')</script>";
   }
 }
 
@@ -125,8 +131,8 @@ $connect->close();
         <div class="container">
           <div class="row justify-content-center">
             <div class="col-lg-5 text-center mx-auto">
-              <h1 class="text-white mb-2 mt-5">Welcome!</h1>
-              <p class="text-lead text-white">First timer ? Sign up for best deals in your life!</p>
+              <h1 class="text-white mb-2 mt-5">OTP!</h1>
+              <p class="text-lead text-white">Check your email! Make sure type it out correctly</p>
             </div>
           </div>
         </div>
@@ -136,7 +142,7 @@ $connect->close();
           <div class="col-xl-4 col-lg-5 col-md-7 mx-auto">
             <div class="card z-index-0">
               <div class="card-header text-center pt-4">
-                <h5>Register with</h5>
+                <h5>Or register with</h5>
               </div>
               <div class="row px-xl-5 px-sm-4 px-3">
                 <div class="col-3 ms-auto px-1">
@@ -178,26 +184,14 @@ $connect->close();
                 </div>
                 <div class="mt-2 position-relative text-center">
                   <p class="text-sm font-weight-bold mb-2 text-secondary text-border d-inline z-index-2 bg-white px-3">
-                    or
+                    insert OTP
                   </p>
                 </div>
               </div>
               <div class="card-body">
                 <form role="form text-left" method="POST" name="sign-up-form">
                   <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Name" aria-label="Name" aria-describedby="email-addon" name="name" id="name">
-                  </div>
-                  <div class="mb-3">
-                    <input type="email" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="email" id="email">
-                  </div>
-                  <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Phone-Number" aria-label="Phone-Number" aria-describedby="email-addon" name="phone_number" id="phone_number">
-                  </div>
-                  <div class="mb-3">
-                    <input type="text" class="form-control" placeholder="Address" aria-label="Address" aria-describedby="email-addon" name="address" id="address">
-                  </div>
-                  <div class="mb-3">
-                    <input type="password" class="form-control" placeholder="Password" aria-label="Password" aria-describedby="password-addon" name="password" id="password">
+                    <input type="text" class="form-control" placeholder="OTP" aria-label="Name" aria-describedby="email-addon" name="otp_input" id="otp_input">
                   </div>
                   <div class="form-check form-check-info text-left">
                     <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" checked>
@@ -206,7 +200,7 @@ $connect->close();
                     </label>
                   </div>
                   <div class="text-center">
-                    <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="sign-up-button" id="submit">SIGN UP</button>
+                    <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" id="submit" name="otp-button">SEND OTP</button>
                   </div>
                   <p class="text-sm mt-3 mb-0">Already have an account? <a href="index.php" class="text-dark font-weight-bolder">Sign in</a></p>
                 </form>
