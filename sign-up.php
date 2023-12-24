@@ -16,7 +16,7 @@
   if(isset($_POST['sign-up-button'])) {
     $_SESSION['otp'] = generateUniqueID();
     $_SESSION['name'] = $_POST['name'];
-    $_SESSION['email'] = $_POST['email'];
+    $_SESSION['email'] = $_POST['email']; 
     $_SESSION['phone_number'] = $_POST['phone_number'];
     $_SESSION['password'] = md5($_POST['password']);
     $_SESSION['address'] = $_POST['address'];
@@ -24,7 +24,7 @@
     $to = $_POST['email'];
     $subject = "Mail Verification";
     $message = "Your OTP code is " . $_SESSION['otp'] . " ! DO NOT SHARE THIS OTP TO OTHERS!";
-    $headers = "From: dayamegaexample@gmail.com\r\n";
+    $headers = "From: 20mei21b@gmail.com\r\n";
     
     if (mail($to, $subject, $message, $headers)) {
       header("Location: verify_email.php");

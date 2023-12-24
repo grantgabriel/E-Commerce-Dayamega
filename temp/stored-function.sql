@@ -337,3 +337,18 @@ BEGIN
     RETURN total_sales;
 END &&
 DELIMITER ;
+
+-- Stored function untuk menghitung total penjualan di bulan tertentu
+DELIMITER &&
+CREATE FUNCTION totalMonthlySales(input_month INT)
+RETURNS DECIMAL(18, 2)
+DETERMINISTIC
+BEGIN
+    DECLARE total_sales DECIMAL(18, 2);
+
+    SELECT SUM(total) INTO total_sales
+    FROM sales_report WHERE MONTH(order_date) = input_month;
+
+    RETURN total_sales;
+END &&
+DELIMITER ;
