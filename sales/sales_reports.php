@@ -329,7 +329,7 @@ $totalSales = $totalSales['totalSales'];
               <div class="align-items-center d-flex justify-content-center">
                 <form action="sales_reports_monthly.php" method="POST">
                   <div class="text-center">
-                    <input type="text" class="form-control" placeholder="Email" aria-label="Email" aria-describedby="email-addon" name="month_num" id="month_num">
+                    <input type="text" class="form-control" placeholder="Enter Month..." aria-label="Email" aria-describedby="email-addon" name="month_num" id="month_num">
                   </div>
                   <div class="text-center">
                     <button class="btn bg-gradient-dark w-100 my-4 mb-2" type="submit" name="sign-up-button" id="submit">Check Monthly Sales</button>
