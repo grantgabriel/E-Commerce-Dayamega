@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost:3306
--- Waktu pembuatan: 06 Des 2023 pada 01.45
+-- Waktu pembuatan: 28 Des 2023 pada 03.38
 -- Versi server: 8.0.30
 -- Versi PHP: 8.1.10
 
@@ -382,12 +382,30 @@ CREATE DEFINER=`root`@`localhost` FUNCTION `monthlyTotal` (`month_param` INT) RE
     RETURN profit;
 END$$
 
+CREATE DEFINER=`root`@`localhost` FUNCTION `totalMonthlySales` (`input_month` INT) RETURNS DECIMAL(18,2) DETERMINISTIC BEGIN
+    DECLARE total_sales DECIMAL(18, 2);
+
+    SELECT SUM(total) INTO total_sales
+    FROM sales_report WHERE MONTH(order_date) = input_month;
+
+    RETURN total_sales;
+END$$
+
 CREATE DEFINER=`root`@`localhost` FUNCTION `totalProducts` () RETURNS INT DETERMINISTIC BEGIN
     DECLARE total INT;
     SELECT COUNT(*) INTO total
     FROM products;
 
     RETURN total;
+END$$
+
+CREATE DEFINER=`root`@`localhost` FUNCTION `totalSales` () RETURNS DECIMAL(18,2) DETERMINISTIC BEGIN
+    DECLARE total_sales DECIMAL(18, 2);
+
+    SELECT SUM(total) INTO total_sales
+    FROM sales_report;
+
+    RETURN total_sales;
 END$$
 
 CREATE DEFINER=`root`@`localhost` FUNCTION `totalStocks` () RETURNS INT DETERMINISTIC BEGIN
@@ -407,21 +425,21 @@ DELIMITER ;
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `all_orders_data` (
-`order_id` char(10)
-,`product_id` char(9)
-,`user_id` char(9)
-,`total` decimal(10,2)
-,`delivery_address` text
-,`contact` char(13)
-,`order_date` timestamp
+`contact` char(13)
 ,`courier_id` char(9)
-,`status` enum('Unconfirmed','Confirmed','Received')
-,`message` varchar(255)
-,`struct` varchar(255)
-,`product_name` text
-,`photo` varchar(255)
-,`dealer_prices` decimal(10,0)
 ,`courier_name` varchar(255)
+,`dealer_prices` decimal(10,0)
+,`delivery_address` text
+,`message` varchar(255)
+,`order_date` timestamp
+,`order_id` char(10)
+,`photo` varchar(255)
+,`product_id` char(9)
+,`product_name` text
+,`status` enum('Unconfirmed','Confirmed','Received')
+,`struct` varchar(255)
+,`total` decimal(10,2)
+,`user_id` char(9)
 );
 
 -- --------------------------------------------------------
@@ -431,13 +449,13 @@ CREATE TABLE `all_orders_data` (
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `all_products` (
-`product_id` char(9)
+`category` varchar(255)
+,`dealer_prices` decimal(10,0)
+,`photo` varchar(255)
+,`product_id` char(9)
 ,`product_name` text
 ,`stock` int
-,`category` varchar(255)
-,`photo` varchar(255)
 ,`user_prices` decimal(10,0)
-,`dealer_prices` decimal(10,0)
 );
 
 -- --------------------------------------------------------
@@ -447,31 +465,31 @@ CREATE TABLE `all_products` (
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `all_product_data` (
-`product_id` char(9)
-,`product_name` text
-,`stock` int
+`antivirus` varchar(255)
+,`category` varchar(255)
 ,`category_id` char(2)
-,`photo` varchar(255)
-,`user_prices` decimal(10,0)
 ,`dealer_prices` decimal(10,0)
-,`spec_display` varchar(255)
-,`spec_ram` varchar(255)
-,`spec_proc` varchar(255)
-,`spec_gpu` varchar(255)
-,`spec_storage` varchar(255)
-,`spec_audio` varchar(255)
-,`spec_battery` varchar(255)
-,`spec_weight` varchar(255)
-,`spec_connectivity` varchar(255)
-,`spec_camera` varchar(255)
-,`spec_extandable_ram` varchar(255)
-,`spec_extandable_ssd` varchar(255)
-,`spec_dimension` varchar(255)
 ,`description` text
 ,`operating_system` varchar(255)
-,`antivirus` varchar(255)
-,`category` varchar(255)
+,`photo` varchar(255)
+,`product_id` char(9)
+,`product_name` text
 ,`sold_products` bigint
+,`spec_audio` varchar(255)
+,`spec_battery` varchar(255)
+,`spec_camera` varchar(255)
+,`spec_connectivity` varchar(255)
+,`spec_dimension` varchar(255)
+,`spec_display` varchar(255)
+,`spec_extandable_ram` varchar(255)
+,`spec_extandable_ssd` varchar(255)
+,`spec_gpu` varchar(255)
+,`spec_proc` varchar(255)
+,`spec_ram` varchar(255)
+,`spec_storage` varchar(255)
+,`spec_weight` varchar(255)
+,`stock` int
+,`user_prices` decimal(10,0)
 );
 
 -- --------------------------------------------------------
@@ -520,12 +538,12 @@ DELIMITER ;
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `confirmed_order_delivery` (
-`order_id` char(10)
-,`name` varchar(255)
+`delivery_address` text
 ,`email` varchar(255)
-,`product_name` text
-,`delivery_address` text
+,`name` varchar(255)
 ,`order_date` timestamp
+,`order_id` char(10)
+,`product_name` text
 );
 
 -- --------------------------------------------------------
@@ -557,12 +575,12 @@ INSERT INTO `couriers` (`user_id`, `hourly_fee`, `vehicle`) VALUES
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `couriers_account` (
-`user_id` char(9)
-,`name` varchar(255)
-,`created_at` timestamp
+`created_at` timestamp
 ,`email` varchar(255)
-,`phone_number` varchar(14)
 ,`hourly_fee` decimal(10,0)
+,`name` varchar(255)
+,`phone_number` varchar(14)
+,`user_id` char(9)
 ,`vehicle` varchar(255)
 );
 
@@ -587,8 +605,9 @@ INSERT INTO `customers` (`user_id`, `last_purchase`, `address`, `second_contact`
 ('RMW6F2U33', NULL, 'Jalan Dwikora Baru No 19', NULL),
 ('UJ23SYDHT', NULL, 'Jalan Binje Belok Kiri Kanan Sikit', NULL),
 ('CBMPZ3KG4', NULL, 'Jalan Neraka Sebelahnya', NULL),
-('LFSIZ89DE', NULL, 'Jalan Surabaya Sebelah Arak ITS', NULL),
-('OK0VLQXX0', NULL, 'Jalan Dekat Gang Gajah Mada', NULL);
+('OK0VLQXX0', NULL, 'Jalan Dekat Gang Gajah Mada', NULL),
+('2UDAYNYWA', NULL, 'Jalan ganteng', NULL),
+('TGEEDVQNU', NULL, 'Jalan dwikora baru no 19', NULL);
 
 -- --------------------------------------------------------
 
@@ -597,13 +616,13 @@ INSERT INTO `customers` (`user_id`, `last_purchase`, `address`, `second_contact`
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `customers_account` (
-`user_id` char(9)
-,`name` varchar(255)
+`address` text
 ,`created_at` timestamp
 ,`email` varchar(255)
-,`phone_number` varchar(14)
-,`address` text
 ,`last_purchase` date
+,`name` varchar(255)
+,`phone_number` varchar(14)
+,`user_id` char(9)
 );
 
 -- --------------------------------------------------------
@@ -625,10 +644,10 @@ CREATE TABLE `empty_stock` (
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `log_account` (
-`user_id` char(9)
+`action` varchar(7)
 ,`name` varchar(255)
 ,`time` timestamp
-,`action` varchar(7)
+,`user_id` char(9)
 );
 
 -- --------------------------------------------------------
@@ -741,7 +760,14 @@ INSERT INTO `log_customers_account` (`user_id`, `name`, `time`, `action`) VALUES
 ('TXN1VGDUY', 'Halim Godfa Sinaga', '2023-12-04 20:54:39', 'DELETED'),
 ('LFSIZ89DE', 'Halim Godfa Sinaga', '2023-12-04 20:55:14', 'CREATED'),
 ('OK0VLQXX0', 'Paskal Irvaldi Manik', '2023-12-04 20:55:40', 'CREATED'),
-('7X81V981A', 'Amelia Johana Romaito Panjaitan', '2023-12-05 06:37:55', 'DELETED');
+('7X81V981A', 'Amelia Johana Romaito Panjaitan', '2023-12-05 06:37:55', 'DELETED'),
+('2UDAYNYWA', 'Ikhwan Prananta', '2023-12-06 02:11:16', 'CREATED'),
+('LFSIZ89DE', 'Halim Godfa Sinaga', '2023-12-06 02:19:27', 'DELETED'),
+('OVY7LQTMJ', 'Retep Grang Sitanggang', '2023-12-24 03:10:20', 'CREATED'),
+('OVY7LQTMJ', 'Retep Grang Sitanggang', '2023-12-24 03:10:41', 'DELETED'),
+('8TJ3RIUQ3', 'Retep Grang Sitanggang', '2023-12-24 04:23:36', 'CREATED'),
+('8TJ3RIUQ3', 'Retep Grang Sitanggang', '2023-12-24 04:49:41', 'DELETED'),
+('TGEEDVQNU', 'Retep Grang Sitanggang', '2023-12-24 07:49:55', 'CREATED');
 
 -- --------------------------------------------------------
 
@@ -999,7 +1025,35 @@ INSERT INTO `log_order_status` (`order_id`, `status`, `time`, `actioner`) VALUES
 ('54JJ4ZSN7S', 'Updated By', '2023-12-05 06:35:20', 'Courier'),
 ('54JJ4ZSN7S', 'Updated By', '2023-12-05 06:35:20', 'Courier'),
 ('54JJ4ZSN7S', 'Updated By', '2023-12-05 06:35:20', 'Courier'),
-('54JJ4ZSN7S', 'Updated By', '2023-12-05 06:35:20', 'Courier');
+('54JJ4ZSN7S', 'Updated By', '2023-12-05 06:35:20', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:37', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:37', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:37', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:37', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:37', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:37', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:37', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:37', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:38', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:38', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:38', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:38', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:38', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:15:38', 'Seller'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:34', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:34', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:34', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:34', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:34', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:34', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:34', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:34', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:36', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:36', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:36', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:36', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:36', 'Courier'),
+('JU015U35Q6', 'Updated By', '2023-12-06 02:17:36', 'Courier');
 
 -- --------------------------------------------------------
 
@@ -1147,7 +1201,10 @@ INSERT INTO `log_product` (`product_id`, `action`, `time`, `price`) VALUES
 ('665ZOHHWN', 'UPDATED', '2023-12-05 06:33:15', 19000000),
 ('665ZOHHWN', 'UPDATED', '2023-12-05 06:33:36', 19000000),
 ('665ZOHHWN', 'UPDATED', '2023-12-05 06:33:36', 19000000),
-('4KKEK7HDZ', 'UPDATED', '2023-12-05 08:01:50', 18000000);
+('4KKEK7HDZ', 'UPDATED', '2023-12-05 08:01:50', 18000000),
+('TLQPDOADQ', 'UPDATED', '2023-12-06 02:12:46', 11000000),
+('665ZOHHWN', 'UPDATED', '2023-12-06 02:14:41', 19000000),
+('665ZOHHWN', 'UPDATED', '2023-12-06 02:14:41', 19000000);
 
 -- --------------------------------------------------------
 
@@ -1156,11 +1213,11 @@ INSERT INTO `log_product` (`product_id`, `action`, `time`, `price`) VALUES
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `log_product_v` (
-`product_id` char(9)
-,`product_name` text
-,`action` enum('CREATED','DELETED','UPDATED','')
-,`time` timestamp
+`action` enum('CREATED','DELETED','UPDATED','')
 ,`price` decimal(10,0)
+,`product_id` char(9)
+,`product_name` text
+,`time` timestamp
 );
 
 -- --------------------------------------------------------
@@ -1250,7 +1307,9 @@ INSERT INTO `log_purchase` (`order_id`, `user_id`, `product_id`, `total`, `time`
 ('YA79HT2N5X', 'RMW6F2U33', 'G7L83EQRL', 16000000, '2023-12-05 13:29:44', 'PURCHASED'),
 ('YA79HT2N5X', 'RMW6F2U33', 'G7L83EQRL', NULL, '2023-12-05 13:32:13', 'DELETED'),
 ('HUJGJ7C2UY', 'RMW6F2U33', '4KKEK7HDZ', 18000000, '2023-12-05 15:01:50', 'PURCHASED'),
-('HUJGJ7C2UY', 'RMW6F2U33', '4KKEK7HDZ', NULL, '2023-12-05 15:07:45', 'DELETED');
+('HUJGJ7C2UY', 'RMW6F2U33', '4KKEK7HDZ', NULL, '2023-12-05 15:07:45', 'DELETED'),
+('JU015U35Q6', '2UDAYNYWA', 'TLQPDOADQ', 11000000, '2023-12-06 09:12:46', 'PURCHASED'),
+('ARKV4I6V8O', 'UJ23SYDHT', '4KKEK7HDZ', NULL, '2023-12-06 09:15:53', 'DELETED');
 
 -- --------------------------------------------------------
 
@@ -1259,12 +1318,12 @@ INSERT INTO `log_purchase` (`order_id`, `user_id`, `product_id`, `total`, `time`
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `log_purchase_v` (
-`order_id` char(10)
+`action` varchar(255)
 ,`name` varchar(255)
+,`order_id` char(10)
 ,`product_name` text
-,`total` decimal(10,0)
 ,`time` datetime
-,`action` varchar(255)
+,`total` decimal(10,0)
 );
 
 -- --------------------------------------------------------
@@ -1335,11 +1394,11 @@ INSERT INTO `orders` (`order_id`, `product_id`, `user_id`, `total`, `delivery_ad
 ('AGADUH313H', 'LEGION001', 'RMW6F2U33', 10000000.00, 'Komplek Marelan Nippon Permai, No 18C', NULL, '2023-11-02 18:45:44', 'KHDA102YI', 'Confirmed', 'Muhammad Thoriq Al Asy-Jari has confirmed your orders!', 'testing.jpg'),
 ('AOSUIST123', 'LEGION001', 'RMW6F2U33', 10000000.00, 'Jalan Rumah Grant No.123', NULL, '2023-11-02 18:45:45', 'KHDA102YI', 'Confirmed', NULL, 'testing.jpg'),
 ('AOUDH78153', 'IDEAPAD01', 'UJ23SYDHT', 7000000.00, 'Jalan Binje dekat KAI', NULL, '2023-09-02 18:45:47', 'KHDA102YI', 'Received', NULL, 'testing.jpg'),
-('ARKV4I6V8O', '4KKEK7HDZ', 'UJ23SYDHT', 18000000.00, 'Jalan Binje Belok Kiri Kanan Sikit', '628983874300', '2023-12-04 18:36:43', 'KHDA102YI', 'Unconfirmed', 'Aku mau aku mau aku mau Yoga Duet 7I OMG', '2023-12-04-656e1c3bb5c2c.png'),
 ('C14M0NR077', 'IDEAPAD01', 'UJ23SYDHT', 7000000.00, 'Jalan Jauh Banget Dekat Tokyo', '+821579471', '2023-09-02 18:45:49', 'KHDA102YI', 'Unconfirmed', NULL, 'testing.jpg'),
 ('DUG5L18VDR', '4KKEK7HDZ', 'RMW6F2U33', 18000000.00, 'Jalan Dwikora Baru No 19', '081298764697', '2023-12-04 17:03:36', 'HSAD032FA', 'Received', NULL, '2023-12-04-656e0668b4b40.jpg'),
 ('J0K0W1KRN1', 'LEGION001', 'UJ23SYDHT', 10000000.00, 'Jalan Binjai Dekat SMAN 1', NULL, '2023-08-02 18:45:50', 'KHDA102YI', 'Received', NULL, 'testing.jpg'),
 ('JDGUY12375', 'IDEAPAD01', 'RMW6F2U33', 7000000.00, 'Jalan Pancing Sebelah Rumah Dira', NULL, '2023-07-02 18:45:51', 'KHDA102YI', 'Confirmed', NULL, 'testing.jpg'),
+('JU015U35Q6', 'TLQPDOADQ', '2UDAYNYWA', 11000000.00, 'Jalan ganteng', '092138912783', '2023-12-06 02:12:46', 'KHDA102YI', 'Received', NULL, '2023-12-06-656fd89e9d54f.jpg'),
 ('LOPC1AM0NS', 'IDEAPAD01', 'RMW6F2U33', 7000000.00, 'Jalan Cinta Diantara Kita No.21', NULL, '2023-06-02 18:45:53', 'KHDA102YI', 'Received', NULL, 'testing.jpg'),
 ('NNA60PC1PP', 'AIVOWFC8Y', 'RMW6F2U33', 14000000.00, 'Jalan Dwikora Baru No 19', '081298764697', '2023-12-04 18:43:14', 'HSAD032FA', 'Unconfirmed', 'Please send in with a bunch of accessories please uwu', '2023-12-04-656e1dc2ce963.png'),
 ('OAUSDHA123', 'IDEAPAD01', 'UJ23SYDHT', 7000000.00, 'Jalan wow keren banget', NULL, '2023-06-02 18:45:55', 'KHDA102YI', 'Received', NULL, 'testing.jpg'),
@@ -1451,14 +1510,14 @@ CREATE TABLE `products` (
 
 INSERT INTO `products` (`product_id`, `product_name`, `stock`, `category_id`, `photo`, `user_prices`, `dealer_prices`, `spec_display`, `spec_ram`, `spec_proc`, `spec_gpu`, `spec_storage`, `spec_audio`, `spec_battery`, `spec_weight`, `spec_connectivity`, `spec_camera`, `spec_extandable_ram`, `spec_extandable_ssd`, `spec_dimension`, `description`, `operating_system`, `antivirus`) VALUES
 ('4KKEK7HDZ', 'YOGA DUET 7I (13 inch, GEN 5)', 0, 'YG', '2023-12-04-656d9225785c1.png', 16000000, 18000000, '13 inch 2K (2160 x 1350), IPS, 100% sRGB Lenovo E-Color Pen dan Lenovo Digital Pen', '16GB DDR4-2666MHz', 'Up to 10th Gen Intel® Core™ i7-10510U processor', 'Intel®Grafis UHD', '512GB SSD NVMe', '2 x Dolby Audio™ Speakers Smart amp™ speakers', 'Up to 10,8 jam (MobileMark 2014)', '0,8Kg / 1,76lbs', 'WiFi 6 (802.11 ax 2x2)', '1MP HD 720p', '-', '-', '297,4mm x 205,5mm x 9,19mm / 11,7 inch x 8,1 inch x 0,4 inch', 'YOGA DUET 7I is the one that brings out your best', 'Windows 11', 'McAvee'),
-('665ZOHHWN', 'IDEAPAD FLEX 5 (14 inch, GEN 8)', 3, 'IP', '2023-12-04-656d8e24cc833.png', 17000000, 19000000, '14 inch 2.2K (2240 x 1400) touch, IPS, 16 10, 300 nits, 100% sRGB, TUV low blue light certification', 'Up to 16GB LPDDR4x', 'Up to AMD Ryzen™ 7 7730U processor', 'AMD Radeon™', 'Up to 1TB SSD M.2 PCIe', 'Dolby Audio™', 'For systems with 2.2K display ', 'Starting at 1.55kg / 3.42lbs', 'WLAN  WiFi 6 Up to Bluetooth® 5.1', 'Up to FHD webcam with privacy shutter', '-', '-', 'As thin as 17.8mm x 313.1mm x 224.9mm / 0.70 inch x 8.85 inch x 12.32 inch', 'This laptop is good', 'Windows 11', 'McAvee'),
+('665ZOHHWN', 'IDEAPAD FLEX 5 (14 inch, GEN 8)', 20, 'IP', '2023-12-04-656d8e24cc833.png', 17000000, 19000000, '14 inch 2.2K (2240 x 1400) touch, IPS, 16 10, 300 nits, 100% sRGB, TUV low blue light certification', 'Up to 16GB LPDDR4x', 'Up to AMD Ryzen™ 7 7730U processor', 'AMD Radeon™', 'Up to 1TB SSD M.2 PCIe', 'Dolby Audio™', 'For systems with 2.2K display ', 'Starting at 1.55kg / 3.42lbs', 'WLAN  WiFi 6 Up to Bluetooth® 5.1', 'Up to FHD webcam with privacy shutter', '-', '-', 'As thin as 17.8mm x 313.1mm x 224.9mm / 0.70 inch x 8.85 inch x 12.32 inch', 'This laptop is good', 'Windows 11', 'McAvee'),
 ('AIVOWFC8Y', 'YOGA 7I (16 inch, GEN 8)', 11, 'YG', '2023-12-04-656d84b717aca.png', 12000000, 14000000, '16 inch WUXGA (1920 x 1200) IPS, 16 10, 300 nits, 45% NTSC, Glossy, 10-point multi-touch glass', 'Up to 16GB DDR5', 'Up to 13th Gen Intel® Core™ i7', 'Intel® Iris® Xe', 'Up to 1TB PCIe SSD Gen 4', '2 x 2W speakers Dolby Atmos® Audio', '71Wh battery WUXGA IPS models  ', 'WUXGA models Starting at 2.04kg / 4.49lbs', 'WiFi Ports/Slots', '1080p FHD + IR RGB webcam with privacy shutter', 'Up to 32 GB', 'Up to 2 TB', '15,2mm-16,5mm x 318mm x 230mm / 0,6 inch-0,65 inch x 12,52 inch x 9,06 inch', 'YOGA 7i is the perfect laptops for artists who is looking for the high tech laptop with a budget ', 'Windows 11', 'McAvee'),
 ('FIJ75X4PT', 'IDEAPAD FLEX 5I (16 inch, GEN 8)', 17, 'IP', '2023-12-04-656d8b4d40cb1.png', 15000000, 17000000, 'Up to 16 inch 2.5K (2560 x 1600) IPS, 60 Hz, 16 10, 400 nits, 100% sRGB, TUV Low Blue Light Certification, Touch', 'Up to LPDDR4x  16 GB', 'Up to 13th Gen Intel® Core™ i7-1355U', 'UMA  Intel® Integrated Graphics', 'Up to PCIe M.2  1TB', '2 x 2W User-facing Speakers, Dolby Audio®', '52.5WHr Polymer Battery Life up to 13.5 Hours', 'Starting at 2.10 kg (4.62 lbs)', 'WiFi Ports/Slots', 'FHD Camera | Privacy Shutter', '-', '-', '(mm)   357.8 x 253.9 x as thin as 18.7', 'Ideapad flex 5I is one of the best of the best', 'Windows 11', 'McAvee'),
 ('G7L83EQRL', 'YOGA 9I (14 inch, GEN 8)', 20, 'YG', '2023-12-04-656d9064156d5.png', 14000000, 16000000, '14 inch 4K (3840 x 2400) PureSight OLED, 400 nits (Peak HDR 600 nits), 16 10 aspect ratio, 100% DCI-P3, 60Hz refresh rate, VESA DisplayHDR™ True Black 500 certified, Dolby Vision™, TUV Rheinland® EyeSafe and Low Blue Light certification, touchscreen.', 'Up to 16GB LPDDR5 dual channel', 'Up to 13th Gen Intel® Core™ i7-1360P', 'Intel® Iris® Xe', 'Up to 1TB PCIe SSD', 'Bowers & Wilkins rotating soundbar system ', 'Up to 10.5 hours (MobileMark® 2018)/Up to 14 hours (Local Video Playback)', 'Starting at 1.4kg / 3.09lbs', 'WiFi 6E Bluetooth® 5.2', 'FHD 1080P IR Camera with camera privacy shutter', 'Up to 32 GB', 'Up to 2 TB', '16.4mm x 301.7mm x 214.6mm / 0.65 inch x 11.88 inch x 8.44 inch', 'This laptop never gets old', 'Windows 11', 'McAvee'),
 ('IDEAPAD01', 'IDEAPAD FLEX 5I (16 inch, GEN 7)', 14, 'IP', '2023-12-04-545c73a606zbz.png', 5000000, 7000000, 'Up to 16 inch 2.5K (2560 x 1600) IPS, 60 Hz, 16 10, 400 nits, 100% sRGB, TUV Low Blue Light Certification, Touch', 'Up to LPDDR4x  16 GB', 'Up to 13th Gen Intel® Core™ i7-1355U', 'UMA  Intel® Integrated Graphics', 'Up to PCIe M.2  1TB', '2 x 2W User-facing Speakers, Dolby Audio®', '52.5WHr Polymer Battery Life up to 13.5 Hours', 'Starting at 2.10 kg (4.62 lbs)', 'WiFi Ports/Slots', 'FHD Camera | Privacy Shutter', '-', '-', '14.08 inch x 9.99 inch x as thin as 0.74 inch', 'Ideapad is an budget laptop, especially for the students in IT USU', 'Red Hat', 'Mc Avee'),
 ('LEGION001', 'THINKPAD L13 YOGA GEN 4 (13 inch AMD)\n\n\n', 14, 'TP', '2023-12-04-435c73a606zbz.png', 10000000, 12000000, 'WUXGA (1920 X 1200) IPS, on-cell touchscreen, antiglare/antismudge, 400 nits, 100% sRGB, TUV certified low blue light', 'Up to 32GB 3200MHz soldered, dual channel\n\n\n', 'Up to AMD Ryzen™ PRO 7030 Series Mobile Processor\n\n\n', 'Integrated AMD Radeon™\n\n\n', 'Up to 32GB 3200MHz soldered, dual channel\n\n\n', '2 x microphones 2 x speakers', '46 Whr Supports Rapid Charge with 65W or higher adapter (60 minutes = 80% runtime)', 'Starting at 1.31kg / 2.9lbs\n\n\n', 'WiFi Ports/Slots', 'HD 720p RGB with webcam privacy shutter\n', '-', '-', '11.5mm x 297.5mm x 232.2mm x / 0.45 inch x 11.71 inch x 9.14 inch\n\n\n', 'Thinkpad like this is goooodd for various amount of users', 'Linux', 'Smadav'),
 ('Q8UN3VN67', 'IDEAPAD FLEX 5I (14 inch, GEN 8)', 4, 'IP', '2023-12-04-656d8c8a8af17.png', 11000000, 13000000, '14 inch WUXGA (1920 x 1200) OLED, 60 Hz, 16 10, 400 nits, 100% DCI-P3, TUV Low Blue Light Certification, Touch', 'Up to LPDDR4x  16 GB', 'Up to Intel® Core™ i7-1355U', 'UMA  Intel® Integrated Graphics', 'Up to PCIe M.2  1TB', '2 x 2W User-facing Speakers, Dolby Audio®', 'Up to 10 hours (MM18) Up to 15 hours (video playback)', 'Metal Cover Version Starting at 1.50 kg (3.31 lbs)', 'WiFi Ports/Slots', 'HD & FHD Camera | Privacy Shutter', '-', '-', '(inches)   12.32 inch x 8.85 inch x as thin as 0.69 inch', 'This laptop is suitable for crative people', 'Windows 11', 'McAvee'),
-('TLQPDOADQ', 'THINKPAD X1 TITANIUM YOGA', 7, 'TP', '2023-12-04-656d8f4208d66.png', 9000000, 11000000, '14 inch FHD (1920 x 1080) IPS touchscreen, 300 nits, 72%NTSC', 'Up to 16GB LPDDR4x', 'Up to 11th Gen Intel®Core™ i7 vPro®', 'Intel®Iris®Xe', 'Up to 1TB PCIe SSD', 'Dolby Atmos®Speaker System 4 x 360-degree mics', 'Up to 8.9 hours 44.5Wh (MM18)', 'Starting at 1.15kg / 2.54lbs', 'Optional  WWAN 4x4 MIMO 5G (LTE CAT20) / 4G (LTE CAT9) ', '1MP HD 720p', 'Up to 32 GB', 'Up to 2 TB', '297,4mm x 205,5mm x 9,19mm / 11,7 inch x 8,1 inch x 0,4 inch', 'This product is one of the best', 'Windows 11', 'McAvee'),
+('TLQPDOADQ', 'THINKPAD X1 TITANIUM YOGA', 6, 'TP', '2023-12-04-656d8f4208d66.png', 9000000, 11000000, '14 inch FHD (1920 x 1080) IPS touchscreen, 300 nits, 72%NTSC', 'Up to 16GB LPDDR4x', 'Up to 11th Gen Intel®Core™ i7 vPro®', 'Intel®Iris®Xe', 'Up to 1TB PCIe SSD', 'Dolby Atmos®Speaker System 4 x 360-degree mics', 'Up to 8.9 hours 44.5Wh (MM18)', 'Starting at 1.15kg / 2.54lbs', 'Optional  WWAN 4x4 MIMO 5G (LTE CAT20) / 4G (LTE CAT9) ', '1MP HD 720p', 'Up to 32 GB', 'Up to 2 TB', '297,4mm x 205,5mm x 9,19mm / 11,7 inch x 8,1 inch x 0,4 inch', 'This product is one of the best', 'Windows 11', 'McAvee'),
 ('X26FGJ701', 'THINKPAD X1 YOGA GEN 8 (14 inch INTEL)', 15, 'TP', '2023-12-03-656bfc0ac28c1.png', 6000000, 8000000, '14 inch WQUXGA OLED (3840 x 2400) HDR400, touchscreen, IPS with Dolby Vision® 500 nits, 100% DCI P3 Color Gamut, antireflective/antismudge, Eyesafe®certified low blue-light emissions', 'Up to 64GB LPDDR5', 'Up to Intel vPro®, an Intel®Evo™ Design with 13th Gen Intel®Core™ i7 processor', 'Intel®Iris®Xe', 'Up to 2TB Gen 4 performance PCIe NVMe SSD', 'Dolby Atmos® - 4 x 360-degree quad-array microphones', '57Whr battery  - Rapid Charge (60 minutes = 80% runtime), requires 65W or higher adapter', 'Starting at 1.38kg / 3lbs', 'WiFi Ports/Slots Docking', 'FHD RGB with webcam privacy shutter', '-', '-', '15.53mm x 314.4mm x 222.3mm x / 0.61 inch x 12.38 inch x 8.75 inch', 'This product is suitable for college students who is looking for high volume tasks with a budget!', 'Windows 11', 'McAvee');
 
 --
@@ -1490,13 +1549,13 @@ DELIMITER ;
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `product_by_popularity` (
-`product_id` char(9)
-,`product_name` text
-,`category` varchar(255)
+`category` varchar(255)
 ,`dealer_prices` decimal(10,0)
-,`user_prices` decimal(10,0)
 ,`photo` varchar(255)
+,`product_id` char(9)
+,`product_name` text
 ,`sold_products` bigint
+,`user_prices` decimal(10,0)
 );
 
 -- --------------------------------------------------------
@@ -1506,11 +1565,11 @@ CREATE TABLE `product_by_popularity` (
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `product_carousels` (
-`product_id` char(9)
-,`product_name` text
-,`category` varchar(255)
+`category` varchar(255)
 ,`dealer_prices` decimal(10,0)
 ,`photo` varchar(255)
+,`product_id` char(9)
+,`product_name` text
 );
 
 -- --------------------------------------------------------
@@ -1557,7 +1616,7 @@ INSERT INTO `reports` (`report_id`, `user_id`, `description`, `status`, `time`) 
 ('TUSDK', 'KHDA102YI', 'Si sem kayak o chin-chin desu!', 'Resolved', '2023-11-29 00:50:21'),
 ('YUIGP', 'KHDA102YI', 'Settings changes saving properly now', 'Resolved', '2023-08-14 06:07:00'),
 ('YUIOP', 'KHDA102YI', 'Unable to save changes in settings', 'Resolved', '2023-12-05 08:10:20'),
-('ZXCVB', 'KHDA102YI', 'Error when accessing certain features', 'Unresolved', '2023-11-11 07:12:00'),
+('ZXCVB', 'KHDA102YI', 'Error when accessing certain features', 'Resolved', '2023-12-06 02:18:20'),
 ('ZXCVF', 'KHDA102YI', 'Performance enhancement applied successfully', 'Resolved', '2023-09-02 04:20:00');
 
 -- --------------------------------------------------------
@@ -1591,16 +1650,33 @@ INSERT INTO `salesman` (`user_id`, `position`, `salary`, `gender`, `background_e
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `sales_account` (
-`user_id` char(9)
-,`name` varchar(255)
+`background_ed` varchar(255)
 ,`created_at` timestamp
 ,`email` varchar(255)
+,`employment_type` varchar(255)
+,`gender` enum('Male','Female')
+,`name` varchar(255)
 ,`phone_number` varchar(14)
 ,`position` varchar(255)
 ,`salary` varchar(30)
-,`gender` enum('Male','Female')
-,`background_ed` varchar(255)
-,`employment_type` varchar(255)
+,`user_id` char(9)
+);
+
+-- --------------------------------------------------------
+
+--
+-- Stand-in struktur untuk tampilan `sales_report`
+-- (Lihat di bawah untuk tampilan aktual)
+--
+CREATE TABLE `sales_report` (
+`customer_name` varchar(255)
+,`delivery_address` text
+,`order_date` timestamp
+,`order_id` char(10)
+,`product_id` char(9)
+,`product_name` text
+,`status` enum('Unconfirmed','Confirmed','Received')
+,`total` decimal(10,2)
 );
 
 -- --------------------------------------------------------
@@ -1610,12 +1686,12 @@ CREATE TABLE `sales_account` (
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `stock_report` (
-`product_id` char(9)
+`dealer_prices` decimal(10,0)
+,`product_id` char(9)
 ,`product_name` text
-,`stock` int
 ,`sold_products` bigint
+,`stock` int
 ,`user_prices` decimal(10,0)
-,`dealer_prices` decimal(10,0)
 );
 
 -- --------------------------------------------------------
@@ -1637,13 +1713,13 @@ CREATE TABLE `treshold_stock` (
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `unconfirmed_order_delivery` (
-`order_id` char(10)
+`delivery_address` text
 ,`name` varchar(255)
+,`order_date` timestamp
+,`order_id` char(10)
 ,`product_name` text
-,`delivery_address` text
 ,`struct` varchar(255)
 ,`total` decimal(10,2)
-,`order_date` timestamp
 );
 
 -- --------------------------------------------------------
@@ -1653,10 +1729,10 @@ CREATE TABLE `unconfirmed_order_delivery` (
 -- (Lihat di bawah untuk tampilan aktual)
 --
 CREATE TABLE `unresolved_bug_report` (
-`report_id` char(5)
-,`name` varchar(255)
+`description` text
 ,`email` varchar(255)
-,`description` text
+,`name` varchar(255)
+,`report_id` char(5)
 ,`time` timestamp
 );
 
@@ -1682,6 +1758,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`user_id`, `name`, `level_user`, `created_at`, `updated_at`, `email`, `phone_number`, `password`) VALUES
+('2UDAYNYWA', 'Ikhwan Prananta', 'Users', '2023-12-06 02:11:16', NULL, 'pra@gmail.com', '092138912783', '3c24ca7afbc8766f1acb7d67893ec16d'),
 ('4TTDVC54B', 'Said Muhammad Mazaya', 'Courier', '2023-12-01 08:59:56', NULL, 'said@gmail.com', '08172673127', 'b7b791e873f143d5318310e59022175d'),
 ('ADMDMGPTM', 'Dayamega Pratama Admin', 'Admin', '2023-11-26 01:24:03', NULL, 'dayamegapratama@gmail.com', '081371699816', '21232f297a57a5a743894a0e4a801fc3'),
 ('AIUH128O1', 'Patricia Indry Ely', 'Sales', '2023-11-24 05:36:52', NULL, 'patchi@gmail.com', '081264036128', '4ffc7bec7f4d4f443ecd75fd07d55db6'),
@@ -1689,10 +1766,10 @@ INSERT INTO `users` (`user_id`, `name`, `level_user`, `created_at`, `updated_at`
 ('CHRISTY06', 'Christy Eliana Simarmata', 'Sales', '2023-11-24 05:36:52', NULL, 'christy@gmail.com', '081315752099', '0584b97a347e8afd603545c731900916'),
 ('HSAD032FA', 'Samuel Christoper Bintang Silaen', 'Courier', '2023-11-27 14:09:19', NULL, 'samuelganteng@gmail.com', '082277955226', 'd8ae5776067290c4712fa454006c8ec6'),
 ('KHDA102YI', 'Oswald Adrian Silalahi', 'Courier', '2023-11-27 11:49:34', NULL, 'oswaldsangkurir@gmail.com', '085274199560', '30d901e9aea791e635c984a6291b70d5'),
-('LFSIZ89DE', 'Halim Godfa Sinaga', 'Users', '2023-12-04 20:55:14', NULL, 'siangkali@gmail.com', '0823671273', 'b99394ce7df5d5739e5a62718f507657'),
 ('M4UR3N999', 'Maureen Lovynka Trunstiatica Zalukhu', 'Courier', '2023-12-01 03:06:59', NULL, 'maureen@gmail.com', '081623771212', '23fac6d182d22ece806f28d7ba0264d4'),
 ('OK0VLQXX0', 'Paskal Irvaldi Manik', 'Users', '2023-12-04 20:55:40', NULL, 'paskals@gmail.com', '0128378273', 'aa141c20d606bb21fc45421d37c63761'),
 ('RMW6F2U33', 'Grant Gabriel Tambunan', 'Users', '2023-11-23 21:56:02', NULL, 'grantgabriel30@gmail.com', '081298764697', '145779bfc6fcd9967e4de7d8b541fac5'),
+('TGEEDVQNU', 'Retep Grang Sitanggang', 'Users', '2023-12-24 07:49:55', NULL, 'grantgabriel3008@gmail.com', '0187621739123', 'd9b1d7db4cd6e70935368a1efb10e377'),
 ('TH0R10912', 'Muhammad Thoriq Al Asy-Jari', 'Sales', '2023-12-01 02:54:26', NULL, 'thoriqqq@gmail.com', '0812328613', 'c0176f364b73516947e8e45b8b3c9e97'),
 ('UJ23SYDHT', 'Pelangi Sanrilla Sinurat', 'Users', '2023-11-24 17:07:19', NULL, 'pelangi@gmail.com', '628983874300', '972a9f0dc30d2d552063983763dab7d8');
 
@@ -1873,6 +1950,15 @@ CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW 
 DROP TABLE IF EXISTS `sales_account`;
 
 CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `sales_account`  AS SELECT `u`.`user_id` AS `user_id`, `u`.`name` AS `name`, `u`.`created_at` AS `created_at`, `u`.`email` AS `email`, `u`.`phone_number` AS `phone_number`, `s`.`position` AS `position`, `s`.`salary` AS `salary`, `s`.`gender` AS `gender`, `s`.`background_ed` AS `background_ed`, `s`.`employment_type` AS `employment_type` FROM (`users` `u` join `salesman` `s` on((`u`.`user_id` = `s`.`user_id`))) ;
+
+-- --------------------------------------------------------
+
+--
+-- Struktur untuk view `sales_report`
+--
+DROP TABLE IF EXISTS `sales_report`;
+
+CREATE ALGORITHM=UNDEFINED DEFINER=`root`@`localhost` SQL SECURITY DEFINER VIEW `sales_report`  AS SELECT `o`.`order_id` AS `order_id`, `o`.`order_date` AS `order_date`, `u`.`name` AS `customer_name`, `p`.`product_id` AS `product_id`, `p`.`product_name` AS `product_name`, `o`.`delivery_address` AS `delivery_address`, `o`.`status` AS `status`, `o`.`total` AS `total` FROM ((`orders` `o` join `products` `p` on((`o`.`product_id` = `p`.`product_id`))) join `users` `u` on((`o`.`user_id` = `u`.`user_id`))) WHERE (`o`.`status` = 'Received') ORDER BY `o`.`order_date` DESC ;
 
 -- --------------------------------------------------------
 
