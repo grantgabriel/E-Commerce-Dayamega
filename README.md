@@ -60,14 +60,14 @@ User accounts can be created in the sign-up registration form, couriers and sale
 ## 💡 Features
 Mipoclean is equipped the full documentation below:
 <br><br>
--> User requirement and case ✅<br>
--> Table listdown, constraint and views✅<br>
--> Table relation ✅<br>
--> Database triggers ✅<br>
--> Database stored procedure and function ✅<br>
--> User privilages and access✅ <br>
--> Testing ✅ <br>
--> etc ✅ <br>
+✅ User requirement and case<br>
+✅ Table listdown, constraint and views<br>
+✅ Table relation<br>
+✅ Database triggers<br>
+✅ Database stored procedure and function<br>
+✅ User privilages and access<br>
+✅ Testing <br>
+✅ etc... <br>
 
 Full documentation can be seen in the **`E-Commerce-Dayamega\docs`**
 
