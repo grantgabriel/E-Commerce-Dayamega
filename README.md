@@ -57,7 +57,7 @@ Users accounts: (LEVEL Users)<br>
 
 User accounts can be created in the sign-up registration form, couriers and sales account can be created in the staff management page in admin.
 
-## 💡 Features
+## 💡 Documentation
 Mipoclean is equipped the full documentation below:
 <br><br>
 ✅ User requirement and case<br>
